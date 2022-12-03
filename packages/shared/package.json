@@ -1,0 +1,22 @@
+{
+  "name": "@monorepo/shared",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Mateo Tomas <mateotomasgomez@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "figlet": "^1.5.2",
+    "rxjs": "^7.5.7"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.5"
+  }
+}

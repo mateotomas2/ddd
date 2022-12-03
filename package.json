@@ -1,0 +1,39 @@
+{
+	"name": "ddd-experiment",
+	"description": "",
+	"version": "0.0.0",
+	"author": "",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"start": "yarn workspaces foreach -piv run start",
+		"build": "yarn workspaces foreach -pti run build",
+		"start:shared": "yarn workspace @monorepo/shared run start",
+		"start:server": "yarn workspace @monorepo/server run start",
+		"start:client": "yarn workspace @monorepo/client run start",
+		"clean": "rm -r packages/server/dist && rm -r packages/shared/dist"
+	},
+	"workspaces": {
+		"packages": [
+			"packages/*"
+		]
+	},
+	"packageManager": "yarn@4.0.0-rc.32",
+	"devDependencies": {
+		"@types/node": "^18.11.10",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"eslint": "^8.0.1",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-config-standard": "^17.0.0",
+		"eslint-config-standard-with-typescript": "^23.0.0",
+		"eslint-plugin-import": "^2.25.2",
+		"eslint-plugin-n": "^15.5.1",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-promise": "^6.0.0",
+		"eslint-plugin-react": "^7.31.11",
+		"prettier": "^2.8.0",
+		"typescript": "^4.9.3"
+	}
+}
