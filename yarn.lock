@@ -546,9 +546,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@monorepo/client@workspace:packages/client":
+"@monorepo/client@workspace:client":
   version: 0.0.0-use.local
-  resolution: "@monorepo/client@workspace:packages/client"
+  resolution: "@monorepo/client@workspace:client"
   dependencies:
     "@monorepo/shared": "npm:*"
     "@types/react": "npm:^18.0.17"
@@ -561,9 +561,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@monorepo/server@workspace:packages/server":
+"@monorepo/server@workspace:server":
   version: 0.0.0-use.local
-  resolution: "@monorepo/server@workspace:packages/server"
+  resolution: "@monorepo/server@workspace:server"
   dependencies:
     "@monorepo/shared": "npm:*"
     "@nestjs/cli": "npm:^8.0.2"
@@ -586,9 +586,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@monorepo/shared@npm:*, @monorepo/shared@workspace:packages/shared":
+"@monorepo/shared@npm:*, @monorepo/shared@workspace:shared":
   version: 0.0.0-use.local
-  resolution: "@monorepo/shared@workspace:packages/shared"
+  resolution: "@monorepo/shared@workspace:shared"
   dependencies:
     "@types/figlet": "npm:^1.5.5"
     figlet: "npm:^1.5.2"

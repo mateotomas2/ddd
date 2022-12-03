@@ -11,11 +11,13 @@
 		"start:shared": "yarn workspace @monorepo/shared run start",
 		"start:server": "yarn workspace @monorepo/server run start",
 		"start:client": "yarn workspace @monorepo/client run start",
-		"clean": "rm -r packages/server/dist && rm -r packages/shared/dist"
+		"clean": "rm -r server/dist && rm -r shared/dist"
 	},
 	"workspaces": {
 		"packages": [
-			"packages/*"
+			"client",
+			"server",
+			"shared"
 		]
 	},
 	"packageManager": "yarn@4.0.0-rc.32",

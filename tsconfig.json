@@ -30,7 +30,7 @@
   },
   "references": [
     {
-       "path": "./packages/shared"
+       "path": "./shared"
     }
   ],
   "exclude": ["node_modules", "dist", "*.d.ts"]
