@@ -1,0 +1,7 @@
+{
+    "typescript.suggestionActions.enabled": false,
+    "javascript.suggestionActions.enabled": false,
+    "eslint.autoFixOnSave": false,
+    "prettier.eslintIntegration": true,
+    "editor.formatOnSave": true,
+}
