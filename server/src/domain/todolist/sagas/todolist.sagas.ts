@@ -18,7 +18,7 @@ export class TodoListSagas {
         // For each one that is marked as done, wait for 10 seconds only if TodoMarkedUndone is not triggered before finishing
         return merge(
           of(value),
-          events$.pipe(ofType(TodoMarkedUndone))
+          events$.pipe(ofType(TodoMarkedUndone), filter((data) => data.id == value.id))
         ).pipe(switchMap(value => {
           if (value.constructor.name == "TodoMarkedUndone") {
             return EMPTY;
