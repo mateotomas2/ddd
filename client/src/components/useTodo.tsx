@@ -51,6 +51,16 @@ export default function useTodo() {
   });
 
 
+  trpc.todo.onTodoListInit.useSubscription(undefined, {
+    onData(input) {
+      setTodos(input);
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error('Subscription error:', err);
+    },
+  });
+
 
   const addTodo = (todo: RouterInput["todo"]["add"]) => mutateAddTodo(todo);
 

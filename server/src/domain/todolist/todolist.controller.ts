@@ -24,7 +24,11 @@ export class TodoListController {
     return this.commandBus.execute(new MarkUndoneCommand(id));
   }
 
-  async findAll(): Promise<TodoList[]> {
+  async getTodoList(): Promise<{
+    id: string;
+    text: string;
+    done: boolean;
+  }[]> {
     return this.queryBus.execute(new GetTodoListQuery());
   }
 }

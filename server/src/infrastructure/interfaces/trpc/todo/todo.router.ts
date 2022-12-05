@@ -119,5 +119,13 @@ export class TRPCTodo {
         this.todoListFeatures.markUndone(input.id);
         return post;
       }),
+
+    onTodoListInit: this.trpcInit.t.procedure.subscription(() => {
+      return observable<Todo[]>((emit) => {
+        this.todoListFeatures.getTodoList().then((todoList) => {
+          emit.next(todoList);
+        });
+      });
+    }),
   });
 }
