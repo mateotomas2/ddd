@@ -20,6 +20,16 @@ export default function useTodo() {
     },
   });
 
+  trpc.todo.onRemove.useSubscription(undefined, {
+    onData(data) {
+      setTodos((todos) => [...todos.filter((todo) => todo.id !== data.id)]);
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error('Subscription error:', err);
+    },
+  });
+
   trpc.todo.onMarkDone.useSubscription(undefined, {
     onData(input) {
       setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: true } : todo));

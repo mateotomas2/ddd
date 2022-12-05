@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { TodoAddedEvent } from '../../../../domain/todolist/events/impl/todo-added.event';
 import { TodoMarkedDone } from '../../../../domain/todolist/events/impl/todo-marked-done.event';
 import { TodoMarkedUndone } from '../../../../domain/todolist/events/impl/todo-marked-undone.event';
+import { TodoRemovedEvent } from '../../../../domain/todolist/events/impl/todo-removed.event';
 import { TodoListController } from '../../../../domain/todolist/todolist.controller';
 import { TRCPInitService } from '../trpc.init.service';
 
@@ -54,6 +55,21 @@ export class TRPCTodo {
         this.todoListFeatures.addTodo(input.text);
         return post;
       }),
+
+    onRemove: this.trpcInit.t.procedure.subscription(() => {
+      return observable<TodoRemovedEvent>((emit) => {
+        const onMarkDone = (data: TodoRemovedEvent) => {
+          emit.next(data);
+        };
+
+        const subscription = this.subscribeToEvent(this.eventBus, TodoRemovedEvent).subscribe(onMarkDone)
+
+        return () => {
+          subscription.unsubscribe();
+        };
+      });
+    }),
+
     onMarkDone: this.trpcInit.t.procedure.subscription(() => {
       return observable<TodoMarkedDone>((emit) => {
         const onMarkDone = (data: TodoMarkedDone) => {
