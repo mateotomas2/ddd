@@ -23,7 +23,7 @@
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true
   },
   "references": [
     {

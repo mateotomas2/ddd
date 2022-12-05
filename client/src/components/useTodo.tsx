@@ -1,16 +1,18 @@
-import { trpc } from '../utils/trpc';
+import { RouterInput, trpc } from '../utils/trpc';
 import { useState } from 'react';
 import { Todo } from '../../../server/src/infrastructure/interfaces/trpc/todo/todo.router';
+import { inferRouterInputs } from '@trpc/server';
 
 export default function useTodo() {
-  const { mutate, error } = trpc.todo.add.useMutation();
-  const { mutate: mutateToggleDone } = trpc.todo.toggleDone.useMutation();
+  const { mutate: mutateAddTodo, error } = trpc.todo.add.useMutation();
+  const { mutate: mutateMarkDone } = trpc.todo.markDone.useMutation();
+  const { mutate: mutateMarkUndone } = trpc.todo.markUndone.useMutation();
 
   const [todos, setTodos] = useState<Array<Todo>>([]);
 
   trpc.todo.onAdd.useSubscription(undefined, {
-    onData(todo) {
-      setTodos((todos) => [...todos, todo]);
+    onData(data) {
+      setTodos((todos) => [...todos, data.todo]);
     },
     onError(err) {
       // eslint-disable-next-line no-console
@@ -18,9 +20,9 @@ export default function useTodo() {
     },
   });
 
-  trpc.todo.onToggleDone.useSubscription(undefined, {
+  trpc.todo.onMarkDone.useSubscription(undefined, {
     onData(input) {
-      setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: input.done } : todo));
+      setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: true } : todo));
     },
     onError(err) {
       // eslint-disable-next-line no-console
@@ -28,18 +30,31 @@ export default function useTodo() {
     },
   });
 
-  const addTodo = (todo: Todo) => {
-    mutate(todo);
-  };
+  trpc.todo.onMarkUndone.useSubscription(undefined, {
+    onData(input) {
+      setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: false } : todo));
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error('Subscription error:', err);
+    },
+  });
 
-  const toogleDone = (input) => {
-    mutateToggleDone(input);
-  };
+
+
+  const addTodo = (todo: RouterInput["todo"]["add"]) => mutateAddTodo(todo);
+
+  const markDone = (input: RouterInput["todo"]["markDone"]) =>
+    mutateMarkDone({ id: input.id });
+
+  const markUndone = (input: RouterInput["todo"]["markUndone"]) =>
+    mutateMarkUndone({ id: input.id });
 
   return {
     todos,
     addTodo,
-    toogleDone,
+    markDone,
+    markUndone,
     error,
   };
 }

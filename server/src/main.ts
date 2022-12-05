@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const trpcService = app.get(TRPCService)
   trpcService.start();
-  
+
   logFancyText("Started");
 }
 

@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { EventsModule } from "./events/events.module";
+import { TodoListModule } from "./domain/todolist/todolist.module";
 import { TRPCModule } from "./infrastructure/interfaces/trpc/trpcModule";
 
 @Module({
-  imports: [EventsModule, TRPCModule],
+  imports: [TRPCModule, TodoListModule],
 })
-export class ApplicationModule {}
+export class ApplicationModule { }

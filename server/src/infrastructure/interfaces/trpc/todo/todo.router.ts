@@ -1,7 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { EventBus, IEvent } from '@nestjs/cqrs';
 import { observable } from '@trpc/server/observable';
+import { filter, map } from 'rxjs';
 import { z } from 'zod';
-import { EventService } from '../events.service';
+import { TodoAddedEvent } from '../../../../domain/todolist/events/impl/todo-added.event';
+import { TodoMarkedDone } from '../../../../domain/todolist/events/impl/todo-marked-done.event';
+import { TodoMarkedUndone } from '../../../../domain/todolist/events/impl/todo-marked-undone.event';
+import { TodoListController } from '../../../../domain/todolist/todolist.controller';
 import { TRCPInitService } from '../trpc.init.service';
 
 export type Todo = {
@@ -14,59 +19,88 @@ export type Todo = {
 export class TRPCTodo {
   constructor(
     @Inject(TRCPInitService) private readonly trpcInit: TRCPInitService,
-    @Inject(EventService) private readonly events: EventService
-  ) { }
+    @Inject(TodoListController) private readonly todoListFeatures: TodoListController,
+    @Inject(EventBus) private readonly eventBus: EventBus
+  ) {
+  }
+  subscribeToEvent = <T extends IEvent>(eventBus: EventBus, type: new (T) => T) => {
+    return eventBus.pipe(filter((event) => (event as IEvent).constructor.name == type.name),
+      map((event) => event as T)
+    )
+  }
 
   todoRouter = this.trpcInit.t.router({
     onAdd: this.trpcInit.t.procedure.subscription(() => {
-      return observable<Todo>((emit) => {
-        const onAdd = (data: Todo) => {
+      return observable<TodoAddedEvent>((emit) => {
+        const onAdd = (data: TodoAddedEvent) => {
           emit.next(data);
         };
-        this.events.eventEmitter.on('add', onAdd);
+
+        const subscription = this.subscribeToEvent(this.eventBus, TodoAddedEvent).subscribe(onAdd)
+
         return () => {
-          this.events.eventEmitter.off('add', onAdd);
+          subscription.unsubscribe();
         };
       });
     }),
     add: this.trpcInit.t.procedure
       .input(
         z.object({
-          id: z.string().uuid().optional(),
-          text: z.string().min(1),
-          done: z.boolean(),
+          text: z.string().min(1)
         })
       )
       .mutation(async ({ input }) => {
         const post = { ...input };
-
-        this.events.eventEmitter.emit('add', post);
+        this.todoListFeatures.addTodo(input.text);
         return post;
       }),
-    onToggleDone: this.trpcInit.t.procedure.subscription(() => {
-      return observable<Todo>((emit) => {
-        const onToggleDone = (data: Todo) => {
+    onMarkDone: this.trpcInit.t.procedure.subscription(() => {
+      return observable<TodoMarkedDone>((emit) => {
+        const onMarkDone = (data: TodoMarkedDone) => {
           emit.next(data);
         };
-        this.events.eventEmitter.on('toogleDone', onToggleDone);
-
+        const subscription = this.subscribeToEvent(this.eventBus, TodoMarkedDone).subscribe(onMarkDone)
         return () => {
-          this.events.eventEmitter.off('toogleDone', onToggleDone);
+          subscription.unsubscribe();
         };
       });
     }),
 
-    toggleDone: this.trpcInit.t.procedure
+    markDone: this.trpcInit.t.procedure
       .input(
         z.object({
-          id: z.string().uuid(),
-          done: z.boolean(),
+          id: z.string().uuid()
         })
       )
       .mutation(async ({ input }) => {
         const post = { ...input };
+        this.todoListFeatures.markDone(input.id);
+        return post;
+      }),
 
-        this.events.eventEmitter.emit('toogleDone', post);
+    onMarkUndone: this.trpcInit.t.procedure.subscription(() => {
+      return observable<TodoMarkedUndone>((emit) => {
+        const onMarkDone = (data: TodoMarkedUndone) => {
+          emit.next(data);
+        };
+
+        const subscription = this.subscribeToEvent(this.eventBus, TodoMarkedUndone).subscribe(onMarkDone)
+
+        return () => {
+          subscription.unsubscribe();
+        };
+      });
+    }),
+
+    markUndone: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          id: z.string().uuid()
+        })
+      )
+      .mutation(async ({ input }) => {
+        const post = { ...input };
+        this.todoListFeatures.markUndone(input.id);
         return post;
       }),
   });

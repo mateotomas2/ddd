@@ -1,12 +1,15 @@
 import { Module } from "@nestjs/common";
-import { EventService } from "./events.service";
+import { CqrsModule } from "@nestjs/cqrs";
+import { TodoListModule } from "../../../domain/todolist/todolist.module";
+import { EventsModule } from "../../events/eventsModule";
 import { TRPCTodo } from "./todo/todo.router";
 import { TRCPInitService } from "./trpc.init.service";
 import { TRPCService } from "./trpcService";
 
 @Module({
+  imports: [CqrsModule, EventsModule, TodoListModule],
   providers: [
-    TRCPInitService, EventService, TRPCTodo, TRPCService
-],
+    TRCPInitService, TRPCTodo, TRPCService
+  ],
 })
-export class TRPCModule {}
+export class TRPCModule { }

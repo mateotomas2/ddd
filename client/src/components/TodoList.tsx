@@ -5,7 +5,7 @@ import useTodo from './useTodo';
 import { useState } from 'react';
 
 export default function TodoList() {
-  const { addTodo, toogleDone, todos } = useTodo();
+  const { addTodo, markDone, markUndone, todos } = useTodo();
   const [newTask, setNewTask] = useState<string>('');
 
   return (
@@ -36,7 +36,9 @@ export default function TodoList() {
             {todos.map((todo) => (
               <ListItem key={todo.id} variant="plain" sx={{ borderRadius: 'sm' }}>
                 <Checkbox label={todo.text} color="neutral" overlay checked={todo.done} onChange={(ev) => {
-                  toogleDone({ id: todo.id, done: ev.target.checked })
+                  if (ev.target.checked) markDone({ id: todo.id })
+                  else markUndone({ id: todo.id })
+
                 }} />
               </ListItem>
             ))}
@@ -53,9 +55,7 @@ export default function TodoList() {
                 onClick={() => {
                   newTask &&
                     addTodo({
-                      id: v4(),
-                      text: newTask,
-                      done: false
+                      text: newTask
                     });
                   setNewTask('');
                 }}
