@@ -3,6 +3,7 @@ import { Button, Checkbox, Grid, List, ListItem, Sheet, TextField, Typography } 
 import { v4 } from 'uuid';
 import useTodo from './useTodo';
 import { useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function TodoList() {
   const { addTodo, markDone, markUndone, todos } = useTodo();
@@ -33,15 +34,25 @@ export default function TodoList() {
         </Typography>
         <Box role="group" aria-labelledby="filter-status">
           <List>
-            {todos.map((todo) => (
-              <ListItem key={todo.id} variant="plain" sx={{ borderRadius: 'sm' }}>
-                <Checkbox label={todo.text} color="neutral" overlay checked={todo.done} onChange={(ev) => {
-                  if (ev.target.checked) markDone({ id: todo.id })
-                  else markUndone({ id: todo.id })
+            <AnimatePresence>
 
-                }} />
-              </ListItem>
-            ))}
+              {todos.map((todo) => (
+                <motion.div
+                  key={todo.id}
+                  initial={{ opacity: 0, height: 0, scale: 0 }}
+                  animate={{ opacity: 1, height: "auto", scale: 1 }}
+                  exit={{ opacity: 0, height: 0, scale: 0 }}
+                >
+                  <ListItem variant="plain" sx={{ borderRadius: 'sm' }}>
+                    <Checkbox label={todo.text} color="neutral" overlay checked={todo.done} onChange={(ev) => {
+                      if (ev.target.checked) markDone({ id: todo.id })
+                      else markUndone({ id: todo.id })
+
+                    }} />
+                  </ListItem>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </List>
           <Grid container spacing={1}>
             <Grid xs={9}>
