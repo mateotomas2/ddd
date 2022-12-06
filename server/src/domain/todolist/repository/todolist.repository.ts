@@ -4,13 +4,13 @@ import { TodoAddedEvent } from '../events/impl/todo-added.event';
 import { TodoList } from '../models/todo-list.model';
 import { todoList } from './fixtures/todo-list';
 
-type Todo = {
+export type Todo = {
   id: string;
   text: string;
   done: boolean;
 }
 
-type TodoListType = {
+export type TodoListType = {
   todos: Todo[]
 }
 
