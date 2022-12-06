@@ -3,9 +3,19 @@
   "compilerOptions": {
     /* Basic Options */
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@monorepo/shared/*": [
+        "../shared/src/*"
+      ],
+    }
   },
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ],
   "include": [
-    "src/**/*"
+    "src/**/*",
   ]
 }

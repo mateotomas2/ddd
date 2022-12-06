@@ -12,15 +12,18 @@ import {
 import { v4 } from "uuid";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { TodoAddedEvent } from "../../../server/src/domain/todolist/events/impl/todo-added.event";
 import { Subject } from "rxjs";
-import { TodoListType } from "../../../server/src/domain/todolist/repository/todolist.repository";
-import { TodoMarkedDone } from "../../../server/src/domain/todolist/events/impl/todo-marked-done.event";
-import { TodoMarkedUndone } from "../../../server/src/domain/todolist/events/impl/todo-marked-undone.event";
+
 import styled from "@emotion/styled";
 import { DevTool } from "./DevTool";
+import {
+  TodoAddedEvent,
+  TodoListType,
+  TodoMarkedDone,
+  TodoMarkedUndone,
+} from "@monorepo/shared";
 
-const reducer = (state, event) => {
+const reducer = (state: TodoListType, event: any) => {
   switch (event.constructor.name) {
     case "TodoAddedEvent":
       state.todos = [...state.todos, event.todo];
@@ -42,7 +45,7 @@ const reducer = (state, event) => {
   return state;
 };
 
-const initialState = { todos: [] };
+const initialState = { todos: [] } as TodoListType;
 
 export default function TodoListOffline() {
   const [newTask, setNewTask] = useState<string>("");
@@ -75,7 +78,7 @@ export default function TodoListOffline() {
     setTodos(newState);
   };
 
-  const dispatch = (event) => {
+  const dispatch = (event: any) => {
     if (currentEventIndex != events.length) {
       recreateStateUntilEventIndex(events.length);
     }

@@ -1,11 +1,11 @@
 import { List, ListItem, Sheet, Tooltip, Typography } from "@mui/joy";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
 
 export const DevTool = (props: {
   events: any[];
-  onClickEvent: (number) => number;
+  onClickEvent: (index: number) => void;
   currentEventIndex: number;
 }) => {
   const { events, onClickEvent, currentEventIndex } = props;
@@ -24,7 +24,7 @@ export const DevTool = (props: {
       onClickEvent(currentEventIndex - 1);
     };
 
-    const keyDownListener = (ev) => {
+    const keyDownListener = (ev: KeyboardEvent) => {
       if (ev.key === "ArrowLeft") goBack();
       if (ev.key === "ArrowRight") goNext();
     };

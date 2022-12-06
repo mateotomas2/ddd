@@ -39,11 +39,11 @@ export class TRPCService {
       });
     });
     console.log("✅ WebSocket Server listening on ws://localhost:3001");
-    process.on("SIGTERM", () => {
+    /*process.on("SIGTERM", () => {
       console.log("SIGTERM");
       handler.broadcastReconnectNotification();
       this.wss.close();
-    });
+    });*/
   };
 }
 export type AppRouter = TRPCService["appRouter"];

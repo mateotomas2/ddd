@@ -3,12 +3,14 @@ import { EventBus, IEvent } from "@nestjs/cqrs";
 import { observable } from "@trpc/server/observable";
 import { filter, map } from "rxjs";
 import { z } from "zod";
-import { TodoAddedEvent } from "../../../../domain/todolist/events/impl/todo-added.event";
-import { TodoMarkedDone } from "../../../../domain/todolist/events/impl/todo-marked-done.event";
-import { TodoMarkedUndone } from "../../../../domain/todolist/events/impl/todo-marked-undone.event";
-import { TodoRemovedEvent } from "../../../../domain/todolist/events/impl/todo-removed.event";
 import { TodoListController } from "../../../../domain/todolist/todolist.controller";
 import { TRCPInitService } from "../trpc.init.service";
+import {
+  TodoAddedEvent,
+  TodoMarkedDone,
+  TodoMarkedUndone,
+  TodoRemovedEvent,
+} from "@monorepo/shared";
 
 export type Todo = {
   id: string;

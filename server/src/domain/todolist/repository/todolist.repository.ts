@@ -1,18 +1,8 @@
+import { Todo, TodoListType } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
-import { TodoAddedEvent } from "../events/impl/todo-added.event";
 import { TodoList } from "../models/todo-list.model";
 import { todoList } from "./fixtures/todo-list";
-
-export type Todo = {
-  id: string;
-  text: string;
-  done: boolean;
-};
-
-export type TodoListType = {
-  todos: Todo[];
-};
 
 @Injectable()
 export class TodoRepository {

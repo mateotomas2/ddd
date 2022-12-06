@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createWSClient, wsLink } from "@trpc/client";
-import { trpc } from "./utils/trpc";
+//import { trpc } from "./utils/trpc";
 import {
   extendTheme as extendJoyTheme,
   CssVarsProvider,
@@ -98,7 +98,7 @@ const wsClient = createWSClient({
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() =>
+  /*const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         wsLink({
@@ -106,17 +106,15 @@ function App() {
         }),
       ],
     })
-  );
+  );*/
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <CssVarsProvider theme={theme}>
-          <CssBaseline />
+    <QueryClientProvider client={queryClient}>
+      <CssVarsProvider theme={theme}>
+        <CssBaseline />
 
-          <Layout />
-        </CssVarsProvider>
-      </QueryClientProvider>
-    </trpc.Provider>
+        <Layout />
+      </CssVarsProvider>
+    </QueryClientProvider>
   );
 }
 

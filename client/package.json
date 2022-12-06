@@ -6,12 +6,12 @@
   "scripts": {
     "start": "sleep 1 && vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:prod": "node dist/main.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@monorepo/shared": "*",
     "@mui/icons-material": "^5.10.16",
     "@mui/joy": "^5.0.0-alpha.56",
     "@mui/material": "^5.10.16",

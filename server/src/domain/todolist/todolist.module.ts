@@ -5,7 +5,7 @@ import { EventHandlers } from "./events/handlers";
 import { TodoListController } from "./todolist.controller";
 import { QueryHandlers } from "./queries/handlers";
 import { TodoRepository } from "./repository/todolist.repository";
-import { TodoListSagas } from "./sagas/todolist.sagas";
+//import { TodoListSagas } from "./sagas/todolist.sagas";
 
 @Module({
   imports: [CqrsModule],
@@ -15,7 +15,7 @@ import { TodoListSagas } from "./sagas/todolist.sagas";
     ...EventHandlers,
     ...QueryHandlers,
     TodoListController,
-    TodoListSagas,
+    //TodoListSagas,
   ],
   exports: [TodoListController],
 })

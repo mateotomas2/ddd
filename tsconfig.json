@@ -18,21 +18,23 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     /* Module Resolution Options */
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
   },
   "references": [
     {
-      "path": "shared"
+      "path": "./shared"
     }
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "*.d.ts"
+    //"*.d.ts"
   ]
 }

@@ -732,7 +732,6 @@ __metadata:
   dependencies:
     "@emotion/react": "npm:^11.10.5"
     "@emotion/styled": "npm:^11.10.5"
-    "@monorepo/shared": "npm:*"
     "@mui/icons-material": "npm:^5.10.16"
     "@mui/joy": "npm:^5.0.0-alpha.56"
     "@mui/material": "npm:^5.10.16"
@@ -758,7 +757,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@monorepo/server@workspace:server"
   dependencies:
-    "@monorepo/shared": "npm:*"
     "@nestjs/cli": "npm:^8.0.2"
     "@nestjs/common": "npm:^8.0.0"
     "@nestjs/core": "npm:^8.0.0"
@@ -782,7 +780,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@monorepo/shared@npm:*, @monorepo/shared@workspace:shared":
+"@monorepo/shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "@monorepo/shared@workspace:shared"
   dependencies:

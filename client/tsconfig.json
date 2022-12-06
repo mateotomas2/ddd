@@ -1,8 +1,44 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable"],
-    "jsx": "react-jsx"
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "types": [],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "paths": {
+      "@monorepo/shared/*": [
+        "../shared/src/*"
+      ],
+    }
   },
-  "include": ["src"],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ],
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "tests/**/*.tsx",
+    "tests/**/*.ts",
+    "node_modules",
+    "../node_modules"
+  ]
 }
