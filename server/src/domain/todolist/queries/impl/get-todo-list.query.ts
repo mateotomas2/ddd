@@ -1,1 +1,1 @@
-export class GetTodoListQuery { }
+export class GetTodoListQuery {}

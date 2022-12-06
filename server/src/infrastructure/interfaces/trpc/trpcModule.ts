@@ -8,8 +8,6 @@ import { TRPCService } from "./trpcService";
 
 @Module({
   imports: [CqrsModule, EventsModule, TodoListModule],
-  providers: [
-    TRCPInitService, TRPCTodo, TRPCService
-  ],
+  providers: [TRCPInitService, TRPCTodo, TRPCService],
 })
-export class TRPCModule { }
+export class TRPCModule {}

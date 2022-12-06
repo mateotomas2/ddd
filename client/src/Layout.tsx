@@ -1,30 +1,25 @@
-import './App.css';
-import {
-    useColorScheme
-} from '@mui/joy';
-import { ModeToggle } from './components/DarkMode';
-import TodoListOffline from './components/TodoListOffline';
+import "./App.css";
+import { useColorScheme } from "@mui/joy";
+import { ModeToggle } from "./components/DarkMode";
+import TodoListOffline from "./components/TodoListOffline";
 
-import styled from '@emotion/styled';
-import { withTheme } from '@emotion/react';
-
+import styled from "@emotion/styled";
+import { withTheme } from "@emotion/react";
 
 export const Layout = () => {
-    const { mode } = useColorScheme();
+  const { mode } = useColorScheme();
 
-    return (
-        <Background mode={mode}>
-            <ModeToggle />
-            <TodoListOffline></TodoListOffline>
-        </Background >
-    );
-}
+  return (
+    <Background mode={mode}>
+      <ModeToggle />
+      <TodoListOffline></TodoListOffline>
+    </Background>
+  );
+};
 
-
-const Background = withTheme((styled.div<{ theme, mode: string | undefined }>`
-    ${({ theme }) => `
+const Background = withTheme(styled.div<{ theme; mode: string | undefined }>`
+  ${({ theme }) => `
         background-color: ${theme.palette.primary.main};
         background-image: linear-gradient(62deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%);
     `}
-`));
-
+`);

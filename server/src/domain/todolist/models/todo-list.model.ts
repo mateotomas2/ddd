@@ -1,9 +1,9 @@
-import { AggregateRoot } from '@nestjs/cqrs';
-import { TodoAddedEvent } from '../events/impl/todo-added.event';
-import { TodoMarkedDone } from '../events/impl/todo-marked-done.event';
-import { v4 } from 'uuid';
-import { TodoMarkedUndone } from '../events/impl/todo-marked-undone.event';
-import { TodoRemovedEvent } from '../events/impl/todo-removed.event';
+import { AggregateRoot } from "@nestjs/cqrs";
+import { TodoAddedEvent } from "../events/impl/todo-added.event";
+import { TodoMarkedDone } from "../events/impl/todo-marked-done.event";
+import { v4 } from "uuid";
+import { TodoMarkedUndone } from "../events/impl/todo-marked-undone.event";
+import { TodoRemovedEvent } from "../events/impl/todo-removed.event";
 
 export class TodoList extends AggregateRoot {
   constructor() {
@@ -11,17 +11,17 @@ export class TodoList extends AggregateRoot {
   }
 
   addTodo(text: string) {
-    this.apply(new TodoAddedEvent({
-      id: v4(),
-      text,
-      done: false
-    }));
+    this.apply(
+      new TodoAddedEvent({
+        id: v4(),
+        text,
+        done: false,
+      })
+    );
   }
 
   removeTodo(id: string) {
-    this.apply(new TodoRemovedEvent(
-      id
-    ));
+    this.apply(new TodoRemovedEvent(id));
   }
 
   markDone(id: string) {

@@ -3,6 +3,5 @@ import { initTRPC } from "@trpc/server";
 
 @Injectable()
 export class TRCPInitService {
-  t = initTRPC.create()
+  t = initTRPC.create();
 }
-

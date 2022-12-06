@@ -1,7 +1,6 @@
-import { RouterInput, trpc } from '../utils/trpc';
-import { useState } from 'react';
-import { Todo } from '../../../server/src/infrastructure/interfaces/trpc/todo/todo.router';
-import { inferRouterInputs } from '@trpc/server';
+import { RouterInput, trpc } from "../utils/trpc";
+import { useState } from "react";
+import { Todo } from "../../../server/src/infrastructure/interfaces/trpc/todo/todo.router";
 
 export default function useTodo() {
   const { mutate: mutateAddTodo, error } = trpc.todo.add.useMutation();
@@ -15,8 +14,7 @@ export default function useTodo() {
       setTodos((todos) => [...todos, data.todo]);
     },
     onError(err) {
-      // eslint-disable-next-line no-console
-      console.error('Subscription error:', err);
+      console.error("Subscription error:", err);
     },
   });
 
@@ -25,42 +23,44 @@ export default function useTodo() {
       setTodos((todos) => [...todos.filter((todo) => todo.id !== data.id)]);
     },
     onError(err) {
-      // eslint-disable-next-line no-console
-      console.error('Subscription error:', err);
+      console.error("Subscription error:", err);
     },
   });
 
   trpc.todo.onMarkDone.useSubscription(undefined, {
     onData(input) {
-      setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: true } : todo));
+      setTodos((todos) =>
+        todos.map((todo) =>
+          todo.id == input.id ? { ...todo, done: true } : todo
+        )
+      );
     },
     onError(err) {
-      // eslint-disable-next-line no-console
-      console.error('Subscription error:', err);
+      console.error("Subscription error:", err);
     },
   });
 
   trpc.todo.onMarkUndone.useSubscription(undefined, {
     onData(input) {
-      setTodos((todos) => todos.map((todo) => todo.id == input.id ? { ...todo, done: false } : todo));
+      setTodos((todos) =>
+        todos.map((todo) =>
+          todo.id == input.id ? { ...todo, done: false } : todo
+        )
+      );
     },
     onError(err) {
-      // eslint-disable-next-line no-console
-      console.error('Subscription error:', err);
+      console.error("Subscription error:", err);
     },
   });
-
 
   trpc.todo.onTodoListInit.useSubscription(undefined, {
     onData(input) {
       setTodos(input);
     },
     onError(err) {
-      // eslint-disable-next-line no-console
-      console.error('Subscription error:', err);
+      console.error("Subscription error:", err);
     },
   });
-
 
   const addTodo = (todo: RouterInput["todo"]["add"]) => mutateAddTodo(todo);
 

@@ -1,12 +1,14 @@
-import { Inject } from '@nestjs/common';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import * as clc from 'cli-color';
-import { TodoRepository } from '../../repository/todolist.repository';
-import { GetTodoListQuery } from '../impl';
+import { Inject } from "@nestjs/common";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
+import * as clc from "cli-color";
+import { TodoRepository } from "../../repository/todolist.repository";
+import { GetTodoListQuery } from "../impl";
 
 @QueryHandler(GetTodoListQuery)
 export class GetTodoListHandler implements IQueryHandler<GetTodoListQuery> {
-  constructor(@Inject(TodoRepository) private readonly repository: TodoRepository) { }
+  constructor(
+    @Inject(TodoRepository) private readonly repository: TodoRepository
+  ) {}
 
   async execute(_query: GetTodoListQuery) {
     return this.repository.findAll();

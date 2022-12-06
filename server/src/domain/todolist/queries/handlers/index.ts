@@ -1,3 +1,3 @@
-import { GetTodoListHandler } from './get-todo-list.handler';
+import { GetTodoListHandler } from "./get-todo-list.handler";
 
 export const QueryHandlers = [GetTodoListHandler];

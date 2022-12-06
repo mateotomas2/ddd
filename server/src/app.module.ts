@@ -5,4 +5,4 @@ import { TRPCModule } from "./infrastructure/interfaces/trpc/trpcModule";
 @Module({
   imports: [TRPCModule, TodoListModule],
 })
-export class ApplicationModule { }
+export class ApplicationModule {}

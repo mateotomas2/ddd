@@ -1,17 +1,20 @@
-import * as figlet from 'figlet';
+import * as figlet from "figlet";
 
-export function logFancyText(text:string) {
-    figlet.text(text,{
-        font: 'Standard',
-        horizontalLayout: 'default',
-        verticalLayout: 'default',
-        width: 80,
-        whitespaceBreak: true
-    }, function(err: any, data: any) {
-        if (err) {
-            console.log(err);
-            throw Error("Cannot create fancy text")
-        }
-        console.log(data)
-    });
+export function logFancyText(text: string) {
+  figlet.text(
+    text,
+    {
+      font: "Cybermedium",
+      horizontalLayout: "default",
+      verticalLayout: "default",
+      width: 80,
+      whitespaceBreak: true,
+    },
+    (err, data) => {
+      if (err) {
+        throw Error("Cannot create fancy text");
+      }
+      console.dir(data);
+    }
+  );
 }

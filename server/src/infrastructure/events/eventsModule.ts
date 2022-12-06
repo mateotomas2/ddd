@@ -3,6 +3,6 @@ import { EventService } from "./events.service";
 
 @Module({
   providers: [EventService],
-  exports: [EventService]
+  exports: [EventService],
 })
-export class EventsModule { }
+export class EventsModule {}
