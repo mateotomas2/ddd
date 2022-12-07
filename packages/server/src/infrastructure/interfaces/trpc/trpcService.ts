@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Inject, Injectable } from "@nestjs/common";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import ws from "ws";
+import { WebSocketServer } from "ws";
 import { TRCPInitService } from "./trpc.init.service";
 import { TRPCTodo } from "./todo/todo.router";
 
@@ -21,7 +21,7 @@ export class TRPCService {
   });
 
   // https://trpc.io/docs/subscriptions
-  wss = new ws.Server({
+  wss = new WebSocketServer({
     port: 3001,
   });
 

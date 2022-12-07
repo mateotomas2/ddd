@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createWSClient, wsLink } from "@trpc/client";
+import { createWSClient } from "@trpc/client";
 //import { trpc } from "./utils/trpc";
 import {
   extendTheme as extendJoyTheme,

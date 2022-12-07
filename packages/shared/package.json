@@ -1,5 +1,6 @@
 {
   "name": "@monorepo/shared",
+  "private": true,
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Mateo Tomas <mateotomasgomez@gmail.com>",
@@ -7,7 +8,9 @@
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "src/index.js",
+  "files": [
+    "./src/*"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "tsc --watch",

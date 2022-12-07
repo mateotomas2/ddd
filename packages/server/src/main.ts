@@ -1,6 +1,6 @@
-import { logFancyText } from "@monorepo/shared";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { logFancyText } from "@monorepo/shared";
 import { ApplicationModule } from "./app.module";
 import { TRPCService } from "./infrastructure/interfaces/trpc/trpcService";
 

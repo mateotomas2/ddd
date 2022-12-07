@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
@@ -21,24 +21,13 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "dist",
-    "paths": {
-      "@monorepo/shared/*": [
-        "../shared/src/*"
-      ],
-    }
   },
-  "references": [
-    {
-      "path": "../shared"
-    }
-  ],
   "include": [
     "src"
   ],
   "exclude": [
     "tests/**/*.tsx",
     "tests/**/*.ts",
-    "node_modules",
-    "../node_modules"
+    "node_modules"
   ]
 }

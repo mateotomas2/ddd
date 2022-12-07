@@ -6,24 +6,15 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"start": "yarn workspaces foreach -piv run start",
-		"start:prod": "yarn workspaces foreach -piv run start:prod",
-		"build": "yarn workspaces foreach -pti run build",
-		"start:shared": "yarn workspace @monorepo/shared run start",
-		"start:server": "yarn workspace @monorepo/server run start",
-		"start:client": "yarn workspace @monorepo/client run start",
+		"start": "pnpm start",
+		"start:prod": "pnpm run start:prod",
+		"build": "pnpm run build",
+		"start:shared": "pnpm --filter @monorepo/shared start",
+		"start:server": "pnpm --filter @monorepo/server start",
+		"start:client": "pnpm --filter @monorepo/client run start",
 		"clean": "rm -r server/dist & rm -r shared/dist",
 		"lint": "eslint"
 	},
-	"workspaces": {
-		"packages": [
-			"client",
-			"server",
-			"shared"
-		]
-	},
-	"packageManager": "yarn@4.0.0-rc.32",
-	"useWorkspaces": true,
 	"devDependencies": {
 		"@types/node": "^18.11.10",
 		"@typescript-eslint/eslint-plugin": "^5.45.1",

@@ -21,22 +21,23 @@ import {
   TodoListType,
   TodoMarkedDone,
   TodoMarkedUndone,
+  TodoRemovedEvent,
 } from "@monorepo/shared";
 
 const reducer = (state: TodoListType, event: any) => {
-  switch (event.constructor.name) {
-    case "TodoAddedEvent":
+  switch (event.constructor) {
+    case TodoAddedEvent:
       state.todos = [...state.todos, event.todo];
       break;
-    case "TodoRemovedEvent":
+    case TodoRemovedEvent:
       state.todos = [...state.todos.filter((todo) => todo.id !== event.id)];
       break;
-    case "TodoMarkedDone":
+    case TodoMarkedDone:
       state.todos = state.todos.map((todo) =>
         todo.id == event.id ? { ...todo, done: true } : todo
       );
       break;
-    case "TodoMarkedUndone":
+    case TodoMarkedUndone:
       state.todos = state.todos.map((todo) =>
         todo.id == event.id ? { ...todo, done: false } : todo
       );
@@ -167,13 +168,3 @@ export default function TodoListOffline() {
     </Grid>
   );
 }
-
-const DevToolStyle = styled(Sheet)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: none;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;
