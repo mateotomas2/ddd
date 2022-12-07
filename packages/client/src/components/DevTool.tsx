@@ -2,9 +2,10 @@ import { List, ListItem, Sheet, Tooltip, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
+import { EventType, Mapped } from "@monorepo/shared";
 
 export const DevTool = (props: {
-  events: any[];
+  events: Mapped[EventType][];
   onClickEvent: (index: number) => void;
   currentEventIndex: number;
 }) => {
@@ -66,7 +67,7 @@ export const DevTool = (props: {
                 title={<pre>{JSON.stringify(event, null, 4)}</pre>}
                 placement="right"
               >
-                <Typography>{event.constructor.name}</Typography>
+                <Typography>{event.type}</Typography>
               </Tooltip>
             </ListItem>
           </motion.div>

@@ -6,13 +6,13 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"start": "pnpm start",
+		"start": "pnpm --parallel --filter @monorepo/* start",
 		"start:prod": "pnpm run start:prod",
 		"build": "pnpm run build",
 		"start:shared": "pnpm --filter @monorepo/shared start",
 		"start:server": "pnpm --filter @monorepo/server start",
 		"start:client": "pnpm --filter @monorepo/client run start",
-		"clean": "rm -r server/dist & rm -r shared/dist",
+		"clean": "rm -r packages/server/dist & rm -r packages/shared/dist",
 		"lint": "eslint"
 	},
 	"devDependencies": {

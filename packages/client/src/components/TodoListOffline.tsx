@@ -6,7 +6,6 @@ import {
   Grid,
   List,
   ListItem,
-  Sheet,
   TextField,
 } from "@mui/joy";
 import { v4 } from "uuid";
@@ -14,32 +13,27 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Subject } from "rxjs";
 
-import styled from "@emotion/styled";
 import { DevTool } from "./DevTool";
-import {
-  TodoAddedEvent,
-  TodoListType,
-  TodoMarkedDone,
-  TodoMarkedUndone,
-  TodoRemovedEvent,
-} from "@monorepo/shared";
+import { TodoListType, createEvent, EventType, Mapped } from "@monorepo/shared";
 
-const reducer = (state: TodoListType, event: any) => {
-  switch (event.constructor) {
-    case TodoAddedEvent:
-      state.todos = [...state.todos, event.todo];
+const reducer = (state: TodoListType, event: Mapped[EventType]) => {
+  switch (event.type) {
+    case "TodoAdded":
+      state.todos = [...state.todos, event.payload];
       break;
-    case TodoRemovedEvent:
-      state.todos = [...state.todos.filter((todo) => todo.id !== event.id)];
+    case "Removed":
+      state.todos = [
+        ...state.todos.filter((todo) => todo.id !== event.payload.id),
+      ];
       break;
-    case TodoMarkedDone:
+    case "MarkedDone":
       state.todos = state.todos.map((todo) =>
-        todo.id == event.id ? { ...todo, done: true } : todo
+        todo.id == event.payload.id ? { ...todo, done: true } : todo
       );
       break;
-    case TodoMarkedUndone:
+    case "MarkedUndone":
       state.todos = state.todos.map((todo) =>
-        todo.id == event.id ? { ...todo, done: false } : todo
+        todo.id == event.payload.id ? { ...todo, done: false } : todo
       );
       break;
   }
@@ -51,8 +45,8 @@ const initialState = { todos: [] } as TodoListType;
 export default function TodoListOffline() {
   const [newTask, setNewTask] = useState<string>("");
   const [todos, setTodos] = useState<TodoListType>(initialState);
-  const [events, setEvents] = useState<any[]>([]);
-  const eventBus = useRef<Subject<any>>();
+  const [events, setEvents] = useState<Mapped[EventType][]>([]);
+  const eventBus = useRef<Subject<Mapped[EventType]>>();
   const [currentEventIndex, setEventIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -79,7 +73,7 @@ export default function TodoListOffline() {
     setTodos(newState);
   };
 
-  const dispatch = (event: any) => {
+  const dispatch = (event: Mapped[EventType]) => {
     if (currentEventIndex != events.length) {
       recreateStateUntilEventIndex(events.length);
     }
@@ -125,8 +119,17 @@ export default function TodoListOffline() {
                     checked={todo.done}
                     onChange={(ev) => {
                       if (ev.target.checked)
-                        dispatch(new TodoMarkedDone(todo.id));
-                      else dispatch(new TodoMarkedUndone(todo.id));
+                        dispatch(
+                          createEvent("MarkedDone", {
+                            id: todo.id,
+                          })
+                        );
+                      else
+                        dispatch(
+                          createEvent("MarkedUndone", {
+                            id: todo.id,
+                          })
+                        );
                     }}
                   />
                 </ListItem>
@@ -149,14 +152,19 @@ export default function TodoListOffline() {
               disabled={newTask === ""}
               sx={{ width: "100%" }}
               onClick={() => {
+                console.log(
+                  createEvent("MarkedDone", {
+                    id: "todo.id",
+                  })
+                );
+
                 dispatch(
-                  new TodoAddedEvent({
+                  createEvent("TodoAdded", {
                     id: v4(),
                     text: newTask,
                     done: false,
                   })
                 );
-
                 setNewTask("");
               }}
             >
