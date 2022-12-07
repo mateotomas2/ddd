@@ -12,7 +12,7 @@
 		"start:shared": "pnpm --filter @monorepo/shared start",
 		"start:server": "pnpm --filter @monorepo/server start",
 		"start:client": "pnpm --filter @monorepo/client run start",
-		"clean": "rm -r packages/server/dist & rm -r packages/shared/dist",
+		"clean": "rm -r packages/server/dist & rm -r packages/shared/dist & rm -r packages/client/node_modules & rm -r packages/server/node_modules & rm -r packages/shared/node_modules",
 		"lint": "eslint"
 	},
 	"devDependencies": {

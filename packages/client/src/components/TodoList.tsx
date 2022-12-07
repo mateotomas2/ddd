@@ -14,40 +14,51 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Subject } from "rxjs";
 
 import { DevTool } from "./DevTool";
-import { TodoListType, createEvent, EventType, Mapped } from "@monorepo/shared";
-
-const reducer = (state: TodoListType, event: Mapped[EventType]) => {
-  switch (event.type) {
-    case "TodoAdded":
-      state.todos = [...state.todos, event.payload];
-      break;
-    case "Removed":
-      state.todos = [
-        ...state.todos.filter((todo) => todo.id !== event.payload.id),
-      ];
-      break;
-    case "MarkedDone":
-      state.todos = state.todos.map((todo) =>
-        todo.id == event.payload.id ? { ...todo, done: true } : todo
-      );
-      break;
-    case "MarkedUndone":
-      state.todos = state.todos.map((todo) =>
-        todo.id == event.payload.id ? { ...todo, done: false } : todo
-      );
-      break;
-  }
-  return state;
-};
-
-const initialState = { todos: [] } as TodoListType;
+import {
+  TodoListType,
+  EventType,
+  Mapped,
+  todoListReducer,
+} from "@monorepo/shared";
+import { trpc } from "../utils/trpc";
 
 export default function TodoListOffline() {
+  const [initialState, setInitialState] = useState<TodoListType>({ todos: [] });
   const [newTask, setNewTask] = useState<string>("");
   const [todos, setTodos] = useState<TodoListType>(initialState);
   const [events, setEvents] = useState<Mapped[EventType][]>([]);
   const eventBus = useRef<Subject<Mapped[EventType]>>();
   const [currentEventIndex, setEventIndex] = useState<number>(0);
+
+  const { mutate: mutateAddTodo } = trpc.todo.add.useMutation();
+  const { mutate: mutateMarkDone } = trpc.todo.markDone.useMutation();
+  const { mutate: mutateMarkUndone } = trpc.todo.markUndone.useMutation();
+
+  trpc.todo.onEventReceived.useSubscription(undefined, {
+    onData(event) {
+      // TODO: not already added event
+      dispatch(event);
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error("Subscription error:", err);
+    },
+  });
+
+  trpc.todo.onTodoListInit.useSubscription(undefined, {
+    onData(input) {
+      setInitialState({
+        todos: input,
+      });
+      setTodos((todos) => ({
+        todos: input,
+      }));
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error("Subscription error:", err);
+    },
+  });
 
   useEffect(() => {
     eventBus.current = new Subject();
@@ -56,7 +67,7 @@ export default function TodoListOffline() {
       setEventIndex((currentIndex) => currentIndex + 1);
       setEvents((events) => [...events, event]);
 
-      setTodos((state) => reducer({ ...state }, event));
+      setTodos((state) => todoListReducer({ ...state }, event));
     });
     return () => {
       eventBus.current?.unsubscribe();
@@ -67,7 +78,7 @@ export default function TodoListOffline() {
     // TODO: Check errors
     let newState = initialState;
     events.slice(0, index).forEach((event) => {
-      newState = reducer({ ...newState }, event);
+      newState = todoListReducer({ ...newState }, event);
     });
 
     setTodos(newState);
@@ -118,7 +129,7 @@ export default function TodoListOffline() {
                     overlay
                     checked={todo.done}
                     onChange={(ev) => {
-                      if (ev.target.checked)
+                      /*if (ev.target.checked)
                         dispatch(
                           createEvent("MarkedDone", {
                             id: todo.id,
@@ -129,7 +140,16 @@ export default function TodoListOffline() {
                           createEvent("MarkedUndone", {
                             id: todo.id,
                           })
-                        );
+                        );*/
+
+                      if (ev.target.checked)
+                        mutateMarkDone({
+                          id: todo.id,
+                        });
+                      else
+                        mutateMarkUndone({
+                          id: todo.id,
+                        });
                     }}
                   />
                 </ListItem>
@@ -152,19 +172,13 @@ export default function TodoListOffline() {
               disabled={newTask === ""}
               sx={{ width: "100%" }}
               onClick={() => {
-                console.log(
-                  createEvent("MarkedDone", {
-                    id: "todo.id",
-                  })
-                );
-
-                dispatch(
-                  createEvent("TodoAdded", {
-                    id: v4(),
-                    text: newTask,
-                    done: false,
-                  })
-                );
+                const newTodo = {
+                  id: v4(),
+                  text: newTask,
+                  done: false,
+                };
+                mutateAddTodo(newTodo);
+                //dispatch(createEvent("TodoAdded", newTodo));
                 setNewTask("");
               }}
             >

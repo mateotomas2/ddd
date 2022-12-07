@@ -25,9 +25,4 @@
   "include": [
     "src"
   ],
-  "exclude": [
-    "tests/**/*.tsx",
-    "tests/**/*.ts",
-    "node_modules"
-  ]
 }

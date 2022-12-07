@@ -1,8 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createWSClient } from "@trpc/client";
-//import { trpc } from "./utils/trpc";
+import { createWSClient, wsLink } from "@trpc/client";
 import {
   extendTheme as extendJoyTheme,
   CssVarsProvider,
@@ -13,6 +12,7 @@ import { deepmerge } from "@mui/utils";
 import { experimental_extendTheme as extendMuiTheme } from "@mui/material/styles";
 import colors from "@mui/joy/colors";
 import { Layout } from "./Layout";
+import { trpc } from "./utils/trpc";
 
 export const muiTheme = extendMuiTheme({
   // This is required to point to `var(--joy-*)` because we are using
@@ -98,7 +98,7 @@ const wsClient = createWSClient({
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
-  /*const [trpcClient] = useState(() =>
+  const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         wsLink({
@@ -106,15 +106,17 @@ function App() {
         }),
       ],
     })
-  );*/
+  );
   return (
-    <QueryClientProvider client={queryClient}>
-      <CssVarsProvider theme={theme}>
-        <CssBaseline />
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <CssVarsProvider theme={theme}>
+          <CssBaseline />
 
-        <Layout />
-      </CssVarsProvider>
-    </QueryClientProvider>
+          <Layout />
+        </CssVarsProvider>
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 }
 

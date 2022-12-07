@@ -1,4 +1,10 @@
-import { Todo, TodoListType } from "@monorepo/shared";
+import {
+  EventType,
+  Mapped,
+  Todo,
+  todoListReducer,
+  TodoListType,
+} from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
 import { TodoList } from "../models/todo-list.model";
@@ -11,8 +17,8 @@ export class TodoRepository {
   };
 
   constructor(@Inject(EventBus) private readonly eventBus: EventBus) {
-    this.eventBus.subscribe((event) => {
-      this.reduce(event);
+    this.eventBus.subscribe((event: Mapped[EventType]) => {
+      this.state = todoListReducer({ ...this.state }, event);
     });
   }
 
@@ -24,8 +30,8 @@ export class TodoRepository {
     return this.state.todos;
   }
 
-  reduce = (event) => {
-    switch (event.constructor.name) {
+  /*reduce = (event) => {
+    switch (event.type) {
       case "TodoAddedEvent":
         this.state.todos = [...this.state.todos, event.todo];
         break;
@@ -45,5 +51,6 @@ export class TodoRepository {
         );
         break;
     }
-  };
+
+  };*/
 }
