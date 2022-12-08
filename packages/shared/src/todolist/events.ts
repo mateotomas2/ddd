@@ -24,6 +24,7 @@ export type Mapped = {
     payload: EventMap[P];
   };
 };
+export type EventTypeMapped = Mapped[EventType];
 
 export const createEvent = <T extends keyof EventMap>(
   eventType: T,

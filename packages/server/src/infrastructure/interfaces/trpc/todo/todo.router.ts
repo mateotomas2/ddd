@@ -1,4 +1,4 @@
-import { EventType, Mapped } from "@monorepo/shared";
+import { EventTypeMapped } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventBus, IEvent } from "@nestjs/cqrs";
 import { observable } from "@trpc/server/observable";
@@ -33,8 +33,8 @@ export class TRPCTodo {
 
   todoRouter = this.trpcInit.t.router({
     onEventReceived: this.trpcInit.t.procedure.subscription(() => {
-      return observable<Mapped[EventType]>((emit) => {
-        const onEventReceived = (data: Mapped[EventType]) => {
+      return observable<EventTypeMapped>((emit) => {
+        const onEventReceived = (data: EventTypeMapped) => {
           emit.next(data);
         };
 
@@ -82,57 +82,7 @@ export class TRPCTodo {
         return post;
       }),
 
-    /*onRemove: this.trpcInit.t.procedure.subscription(() => {
-      return observable<TodoRemovedEvent>((emit) => {
-        const onMarkDone = (data: TodoRemovedEvent) => {
-          emit.next(data);
-        };
-
-        const subscription = this.subscribeToEvent(
-          this.eventBus,
-          TodoRemovedEvent
-        ).subscribe(onMarkDone);
-
-        return () => {
-          subscription.unsubscribe();
-        };
-      });
-    }),
-
-    onMarkDone: this.trpcInit.t.procedure.subscription(() => {
-      return observable<TodoMarkedDone>((emit) => {
-        const onMarkDone = (data: TodoMarkedDone) => {
-          emit.next(data);
-        };
-        const subscription = this.subscribeToEvent(
-          this.eventBus,
-          TodoMarkedDone
-        ).subscribe(onMarkDone);
-        return () => {
-          subscription.unsubscribe();
-        };
-      });
-    }),
-
-    onMarkUndone: this.trpcInit.t.procedure.subscription(() => {
-      return observable<TodoMarkedUndone>((emit) => {
-        const onMarkDone = (data: TodoMarkedUndone) => {
-          emit.next(data);
-        };
-
-        const subscription = this.subscribeToEvent(
-          this.eventBus,
-          TodoMarkedUndone
-        ).subscribe(onMarkDone);
-
-        return () => {
-          subscription.unsubscribe();
-        };
-      });
-    }),
-
-*/
-    onTodoListInit: this.trpcInit.t.procedure.subscription(() => {
+    onTodoListSnapshot: this.trpcInit.t.procedure.subscription(() => {
       return observable<Todo[]>((emit) => {
         /*this.todoListFeatures.getTodoList().then((todoList) => {
           emit.next(todoList);
@@ -140,7 +90,7 @@ export class TRPCTodo {
       });
     }),
     onTodoListEvents: this.trpcInit.t.procedure.subscription(() => {
-      return observable<Mapped[EventType][]>((emit) => {
+      return observable<EventTypeMapped[]>((emit) => {
         this.todoListFeatures.getTodoListEvents().then((eventList) => {
           emit.next(eventList);
         });

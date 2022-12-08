@@ -1,4 +1,4 @@
-import { EventType, Mapped, Todo } from "@monorepo/shared";
+import { EventTypeMapped, Todo } from "@monorepo/shared";
 import { Inject } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { AddTodoCommand } from "./commands/impl/add-todo.command";
@@ -28,7 +28,7 @@ export class TodoListController {
     return this.queryBus.execute(new GetTodoListQuery());
   }
 
-  async getTodoListEvents(): Promise<Mapped[EventType][]> {
+  async getTodoListEvents(): Promise<EventTypeMapped[]> {
     return this.queryBus.execute(new GetTodoListEventsQuery());
   }
 }

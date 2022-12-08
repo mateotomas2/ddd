@@ -2,10 +2,10 @@ import { List, ListItem, Sheet, Tooltip, Typography } from "@mui/joy";
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import styled from "@emotion/styled";
-import { EventType, Mapped } from "@monorepo/shared";
+import { EventTypeMapped } from "@monorepo/shared";
 
 export const DevTool = (props: {
-  events: Mapped[EventType][];
+  events: EventTypeMapped[];
   onClickEvent: (index: number) => void;
   currentEventIndex: number;
 }) => {

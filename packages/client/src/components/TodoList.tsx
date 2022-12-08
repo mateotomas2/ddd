@@ -16,9 +16,8 @@ import { Subject } from "rxjs";
 import { DevTool } from "./DevTool";
 import {
   TodoListType,
-  EventType,
-  Mapped,
   todoListReducer,
+  EventTypeMapped,
 } from "@monorepo/shared";
 import { trpc } from "../utils/trpc";
 
@@ -26,8 +25,8 @@ export default function TodoListOffline() {
   const [initialState, setInitialState] = useState<TodoListType>({ todos: [] });
   const [newTask, setNewTask] = useState<string>("");
   const [todos, setTodos] = useState<TodoListType>(initialState);
-  const [events, setEvents] = useState<Mapped[EventType][]>([]);
-  const eventBus = useRef<Subject<Mapped[EventType]>>();
+  const [events, setEvents] = useState<EventTypeMapped[]>([]);
+  const eventBus = useRef<Subject<EventTypeMapped>>();
   const [currentEventIndex, setEventIndex] = useState<number>(0);
 
   const { mutate: mutateAddTodo } = trpc.todo.add.useMutation();
@@ -88,7 +87,7 @@ export default function TodoListOffline() {
   }, []);
 
   const recreateStateUntilEventIndex = (
-    events: Mapped[EventType][],
+    events: EventTypeMapped[],
     index: number
   ) => {
     // TODO: Check errors
@@ -100,7 +99,7 @@ export default function TodoListOffline() {
     setTodos(newState);
   };
 
-  const dispatch = (event: Mapped[EventType]) => {
+  const dispatch = (event: EventTypeMapped) => {
     if (currentEventIndex != events.length) {
       recreateStateUntilEventIndex(events, events.length);
     }

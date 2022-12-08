@@ -1,6 +1,5 @@
 import {
-  EventType,
-  Mapped,
+  EventTypeMapped,
   Todo,
   todoListReducer,
   TodoListType,
@@ -16,10 +15,10 @@ export class TodoRepository {
     todos: [],
   };
 
-  eventList: Mapped[EventType][] = [];
+  eventList: EventTypeMapped[] = [];
 
   constructor(@Inject(EventBus) private readonly eventBus: EventBus) {
-    this.eventBus.subscribe((event: Mapped[EventType]) => {
+    this.eventBus.subscribe((event: EventTypeMapped) => {
       this.eventList.push(event);
       this.state = todoListReducer({ ...this.state }, event);
     });
@@ -33,7 +32,7 @@ export class TodoRepository {
     return this.state.todos;
   }
 
-  async getEvents(): Promise<Mapped[EventType][]> {
+  async getEvents(): Promise<EventTypeMapped[]> {
     return this.eventList;
   }
 }

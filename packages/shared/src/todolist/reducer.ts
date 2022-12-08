@@ -1,9 +1,9 @@
-import { EventType, Mapped } from "./events";
+import { EventTypeMapped } from "./events";
 import { TodoListType } from "./todolist-types";
 
 export const todoListReducer = (
   state: TodoListType,
-  event: Mapped[EventType]
+  event: EventTypeMapped
 ) => {
   switch (event.type) {
     case "TodoAdded":
