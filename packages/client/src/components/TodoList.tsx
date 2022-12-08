@@ -81,7 +81,6 @@ export default function TodoListOffline() {
     { aggregateId: params.postId },
     {
       onData(input) {
-        console.log(input);
         setEvents(input);
         setEventIndex(input.length);
 

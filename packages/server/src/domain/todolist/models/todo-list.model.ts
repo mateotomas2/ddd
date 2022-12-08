@@ -7,6 +7,15 @@ export class TodoList extends AggregateRoot {
     super();
   }
 
+  new(id: string, name: string) {
+    this.apply(
+      createEvent(id, "TodoListCreated", {
+        id,
+        name,
+      })
+    );
+  }
+
   addTodo(text: string) {
     this.apply(
       createEvent(this.id, "TodoAdded", {

@@ -6,22 +6,33 @@ import {
 } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
+import mongoose, { InferSchemaType, Schema, Types } from "mongoose";
 import { TodoList } from "../models/todo-list.model";
 
+const EventDBSchema = new Schema({
+  aggregateId: { type: String, required: true },
+  type: { type: String, required: true },
+  timestamp: { type: Number, required: true },
+  payload: { type: Object, required: true },
+});
+
+type EventDBType = InferSchemaType<typeof EventDBSchema>;
+const EventDB = mongoose.model<EventDBType>("events", EventDBSchema);
+
+// TODO: Complicate logic so we need to recreate the state and add snapshots
 @Injectable()
 export class TodoRepository {
   state: Record<string, TodoListType> = {};
 
-  eventList: Record<string, EventTypeMapped[]> = {};
-
   constructor(@Inject(EventBus) private readonly eventBus: EventBus) {
-    this.eventBus.subscribe((event: EventTypeMapped) => {
-      console.log("this.eventBus.subscribe");
-      console.log(event);
-      if (!this.eventList[event.aggregateId]) {
-        this.eventList[event.aggregateId] = [];
-      }
-      this.eventList[event.aggregateId].push(event);
+    this.eventBus.subscribe(async (event: EventTypeMapped) => {
+      const eventEntity = new EventDB({
+        aggregateId: event.aggregateId,
+        type: event.type,
+        timestamp: event.timestamp,
+        payload: event.payload,
+      });
+      await eventEntity.save();
 
       if (!this.state[event.aggregateId]) {
         // TODO: This should not be needed
@@ -39,12 +50,7 @@ export class TodoRepository {
     });
   }
 
-  async new(id: string, name: string): Promise<TodoList> {
-    this.state[id] = {
-      id: id,
-      name: name,
-      todos: [],
-    };
+  async new(id: string): Promise<TodoList> {
     return new TodoList(id);
   }
 
@@ -57,9 +63,13 @@ export class TodoRepository {
   }
 
   async getEvents(aggregateId: string): Promise<EventTypeMapped[]> {
-    if (!this.eventList[aggregateId]) {
-      this.eventList[aggregateId] = [];
-    }
-    return this.eventList[aggregateId];
+    const events = await EventDB.find({ aggregateId: { $eq: aggregateId } });
+
+    return events.map((event) => ({
+      aggregateId: event.aggregateId,
+      type: event.type,
+      timestamp: event.timestamp,
+      payload: event.payload,
+    })) as EventTypeMapped[];
   }
 }

@@ -6,6 +6,9 @@ export const todoListReducer = (
   event: EventTypeMapped
 ) => {
   switch (event.type) {
+    case "TodoListCreated":
+      state = { id: event.payload.id, name: event.payload.name, todos: [] };
+      break;
     case "TodoAdded":
       state.todos = [...state.todos, event.payload];
       break;

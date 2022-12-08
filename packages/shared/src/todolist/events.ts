@@ -1,4 +1,8 @@
 export type EventMap = {
+  TodoListCreated: {
+    id: string;
+    name: string;
+  };
   TodoAdded: {
     id: string;
     done: boolean;

@@ -1,0 +1,32 @@
+version: '3.6'
+# docker-compose down -v --rmi all
+# mongodb://todolist:todolistpass@mongodb:27017/todolist?ssl=false
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=todolist
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - USER=todolist
+      - PASSWORD=todolistpass
+    volumes:
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
+
+  mongoclient:
+    image: mongoclient/mongoclient:latest
+    depends_on:
+      - mongodb
+    ports:
+      - 3300:3000
+    links:
+      - "mongodb:mongodb"
+
+volumes:
+  mongodb:
+  mongoconfig:

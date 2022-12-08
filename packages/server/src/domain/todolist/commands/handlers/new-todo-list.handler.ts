@@ -11,14 +11,11 @@ export class NewTodoListHandler implements ICommandHandler<NewTodoListCommand> {
   ) {}
 
   async execute(command: NewTodoListCommand) {
-    // TODO: Should use the aggregate
-    const todoList = this.repository.new(command.id, command.name);
-    /*console.log("NewTodoListCommand");
-    console.log(todoList);*/
-    /*const todoList = this.publisher.mergeObjectContext(
-      await this.repository.get()
+    const todoList = this.publisher.mergeObjectContext(
+      await this.repository.new(command.id)
     );
-    todoList.new(command.text);
-    todoList.commit();*/
+
+    todoList.new(command.id, command.name);
+    todoList.commit();
   }
 }
