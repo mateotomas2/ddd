@@ -134,8 +134,15 @@ export class TRPCTodo {
 */
     onTodoListInit: this.trpcInit.t.procedure.subscription(() => {
       return observable<Todo[]>((emit) => {
-        this.todoListFeatures.getTodoList().then((todoList) => {
+        /*this.todoListFeatures.getTodoList().then((todoList) => {
           emit.next(todoList);
+        });*/
+      });
+    }),
+    onTodoListEvents: this.trpcInit.t.procedure.subscription(() => {
+      return observable<Mapped[EventType][]>((emit) => {
+        this.todoListFeatures.getTodoListEvents().then((eventList) => {
+          emit.next(eventList);
         });
       });
     }),

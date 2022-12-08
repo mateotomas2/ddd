@@ -1,9 +1,10 @@
+import { EventType, Mapped, Todo } from "@monorepo/shared";
 import { Inject } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { AddTodoCommand } from "./commands/impl/add-todo.command";
 import { MarkDoneCommand } from "./commands/impl/mark-done.command";
 import { MarkUndoneCommand } from "./commands/impl/mark-undone.command";
-import { GetTodoListQuery } from "./queries/impl";
+import { GetTodoListEventsQuery, GetTodoListQuery } from "./queries/impl";
 
 export class TodoListController {
   constructor(
@@ -23,13 +24,11 @@ export class TodoListController {
     return this.commandBus.execute(new MarkUndoneCommand(id));
   }
 
-  async getTodoList(): Promise<
-    {
-      id: string;
-      text: string;
-      done: boolean;
-    }[]
-  > {
+  async getTodoList(): Promise<Todo[]> {
     return this.queryBus.execute(new GetTodoListQuery());
+  }
+
+  async getTodoListEvents(): Promise<Mapped[EventType][]> {
+    return this.queryBus.execute(new GetTodoListEventsQuery());
   }
 }

@@ -60,6 +60,19 @@ export default function TodoListOffline() {
     },
   });
 
+  trpc.todo.onTodoListEvents.useSubscription(undefined, {
+    onData(input) {
+      setEvents(input);
+      setEventIndex(input.length);
+
+      recreateStateUntilEventIndex(input, input.length);
+    },
+    onError(err) {
+      // eslint-disable-next-line no-console
+      console.error("Subscription error:", err);
+    },
+  });
+
   useEffect(() => {
     eventBus.current = new Subject();
 
@@ -72,9 +85,12 @@ export default function TodoListOffline() {
     return () => {
       eventBus.current?.unsubscribe();
     };
-  });
+  }, []);
 
-  const recreateStateUntilEventIndex = (index: number) => {
+  const recreateStateUntilEventIndex = (
+    events: Mapped[EventType][],
+    index: number
+  ) => {
     // TODO: Check errors
     let newState = initialState;
     events.slice(0, index).forEach((event) => {
@@ -86,9 +102,9 @@ export default function TodoListOffline() {
 
   const dispatch = (event: Mapped[EventType]) => {
     if (currentEventIndex != events.length) {
-      recreateStateUntilEventIndex(events.length);
+      recreateStateUntilEventIndex(events, events.length);
     }
-    setEventIndex(events.length);
+    //setEventIndex(events.length);
 
     eventBus.current?.next(event);
   };
@@ -105,7 +121,7 @@ export default function TodoListOffline() {
       <DevTool
         events={events}
         onClickEvent={(index) => {
-          recreateStateUntilEventIndex(index);
+          recreateStateUntilEventIndex(events, index);
           setEventIndex(index);
         }}
         currentEventIndex={currentEventIndex}

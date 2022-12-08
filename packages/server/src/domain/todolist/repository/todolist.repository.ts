@@ -16,8 +16,11 @@ export class TodoRepository {
     todos: [],
   };
 
+  eventList: Mapped[EventType][] = [];
+
   constructor(@Inject(EventBus) private readonly eventBus: EventBus) {
     this.eventBus.subscribe((event: Mapped[EventType]) => {
+      this.eventList.push(event);
       this.state = todoListReducer({ ...this.state }, event);
     });
   }
@@ -30,27 +33,7 @@ export class TodoRepository {
     return this.state.todos;
   }
 
-  /*reduce = (event) => {
-    switch (event.type) {
-      case "TodoAddedEvent":
-        this.state.todos = [...this.state.todos, event.todo];
-        break;
-      case "TodoRemovedEvent":
-        this.state.todos = [
-          ...this.state.todos.filter((todo) => todo.id !== event.id),
-        ];
-        break;
-      case "TodoMarkedDone":
-        this.state.todos = this.state.todos.map((todo) =>
-          todo.id == event.id ? { ...todo, done: true } : todo
-        );
-        break;
-      case "TodoMarkedUndone":
-        this.state.todos = this.state.todos.map((todo) =>
-          todo.id == event.id ? { ...todo, done: false } : todo
-        );
-        break;
-    }
-
-  };*/
+  async getEvents(): Promise<Mapped[EventType][]> {
+    return this.eventList;
+  }
 }
