@@ -10,7 +10,7 @@ export class GetTodoListHandler implements IQueryHandler<GetTodoListQuery> {
     @Inject(TodoRepository) private readonly repository: TodoRepository
   ) {}
 
-  async execute(_query: GetTodoListQuery) {
-    return this.repository.findAll();
+  async execute(query: GetTodoListQuery) {
+    return this.repository.findAll(query.aggregateId);
   }
 }

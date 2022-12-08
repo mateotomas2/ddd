@@ -4,6 +4,7 @@ import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { AddTodoCommand } from "./commands/impl/add-todo.command";
 import { MarkDoneCommand } from "./commands/impl/mark-done.command";
 import { MarkUndoneCommand } from "./commands/impl/mark-undone.command";
+import { NewTodoListCommand } from "./commands/impl/new-todo-list.command";
 import { GetTodoListEventsQuery, GetTodoListQuery } from "./queries/impl";
 
 export class TodoListController {
@@ -12,23 +13,26 @@ export class TodoListController {
     @Inject(QueryBus) private readonly queryBus: QueryBus
   ) {}
 
-  async addTodo(text: string) {
-    return this.commandBus.execute(new AddTodoCommand(text));
+  async new(id: string, name: string) {
+    return this.commandBus.execute(new NewTodoListCommand(id, name));
+  }
+  async addTodo(aggregateId: string, text: string) {
+    return this.commandBus.execute(new AddTodoCommand(aggregateId, text));
   }
 
-  async markDone(id: string) {
-    return this.commandBus.execute(new MarkDoneCommand(id));
+  async markDone(aggregateId: string, id: string) {
+    return this.commandBus.execute(new MarkDoneCommand(aggregateId, id));
   }
 
-  async markUndone(id: string) {
-    return this.commandBus.execute(new MarkUndoneCommand(id));
+  async markUndone(aggregateId: string, id: string) {
+    return this.commandBus.execute(new MarkUndoneCommand(aggregateId, id));
   }
 
-  async getTodoList(): Promise<Todo[]> {
-    return this.queryBus.execute(new GetTodoListQuery());
+  async getTodoList(aggregateId: string): Promise<Todo[]> {
+    return this.queryBus.execute(new GetTodoListQuery(aggregateId));
   }
 
-  async getTodoListEvents(): Promise<EventTypeMapped[]> {
-    return this.queryBus.execute(new GetTodoListEventsQuery());
+  async getTodoListEvents(aggregateId: string): Promise<EventTypeMapped[]> {
+    return this.queryBus.execute(new GetTodoListEventsQuery(aggregateId));
   }
 }

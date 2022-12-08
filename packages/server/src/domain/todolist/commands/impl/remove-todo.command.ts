@@ -1,3 +1,6 @@
 export class RemoveTodoCommand {
-  constructor(public readonly id: string) {}
+  constructor(
+    public readonly aggregateId: string,
+    public readonly id: string
+  ) {}
 }

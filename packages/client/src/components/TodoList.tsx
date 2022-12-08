@@ -20,9 +20,15 @@ import {
   EventTypeMapped,
 } from "@monorepo/shared";
 import { trpc } from "../utils/trpc";
+import { todoListRouter } from "../Layout";
+import { useMatch } from "@tanstack/react-router";
 
 export default function TodoListOffline() {
-  const [initialState, setInitialState] = useState<TodoListType>({ todos: [] });
+  const [initialState, setInitialState] = useState<TodoListType>({
+    id: "",
+    name: "",
+    todos: [],
+  });
   const [newTask, setNewTask] = useState<string>("");
   const [todos, setTodos] = useState<TodoListType>(initialState);
   const [events, setEvents] = useState<EventTypeMapped[]>([]);
@@ -32,45 +38,61 @@ export default function TodoListOffline() {
   const { mutate: mutateAddTodo } = trpc.todo.add.useMutation();
   const { mutate: mutateMarkDone } = trpc.todo.markDone.useMutation();
   const { mutate: mutateMarkUndone } = trpc.todo.markUndone.useMutation();
+  // TODO: get from props
+  const { params } = useMatch(todoListRouter.id);
 
-  trpc.todo.onEventReceived.useSubscription(undefined, {
-    onData(event) {
-      // TODO: not already added event
-      dispatch(event);
-    },
-    onError(err) {
-      // eslint-disable-next-line no-console
-      console.error("Subscription error:", err);
-    },
-  });
+  /*useEffect(() => {
+    mutateSubscribe({ aggregateId: params.id });
+  }, []);*/
 
-  trpc.todo.onTodoListInit.useSubscription(undefined, {
-    onData(input) {
-      setInitialState({
-        todos: input,
-      });
-      setTodos((todos) => ({
-        todos: input,
-      }));
-    },
-    onError(err) {
-      // eslint-disable-next-line no-console
-      console.error("Subscription error:", err);
-    },
-  });
+  trpc.todo.onEventReceived.useSubscription(
+    { aggregateId: params.postId },
+    {
+      onData(event) {
+        // TODO: not already added event
+        dispatch(event);
+      },
+      onError(err) {
+        // eslint-disable-next-line no-console
+        console.error("Subscription error:", err);
+      },
+    }
+  );
 
-  trpc.todo.onTodoListEvents.useSubscription(undefined, {
-    onData(input) {
-      setEvents(input);
-      setEventIndex(input.length);
+  trpc.todo.onTodoListSnapshot.useSubscription(
+    { aggregateId: params.postId },
+    {
+      onData(input) {
+        /*setInitialState({
+          todos: input,
+        });
+        setTodos((todos) => ({
+          todos: input,
+        }));*/
+      },
+      onError(err) {
+        // eslint-disable-next-line no-console
+        console.error("Subscription error:", err);
+      },
+    }
+  );
 
-      recreateStateUntilEventIndex(input, input.length);
-    },
-    onError(err) {
-      // eslint-disable-next-line no-console
-      console.error("Subscription error:", err);
-    },
-  });
+  trpc.todo.onTodoListEvents.useSubscription(
+    { aggregateId: params.postId },
+    {
+      onData(input) {
+        console.log(input);
+        setEvents(input);
+        setEventIndex(input.length);
+
+        recreateStateUntilEventIndex(input, input.length);
+      },
+      onError(err) {
+        // eslint-disable-next-line no-console
+        console.error("Subscription error:", err);
+      },
+    }
+  );
 
   useEffect(() => {
     eventBus.current = new Subject();
@@ -159,10 +181,12 @@ export default function TodoListOffline() {
 
                       if (ev.target.checked)
                         mutateMarkDone({
+                          aggregateId: params.postId,
                           id: todo.id,
                         });
                       else
                         mutateMarkUndone({
+                          aggregateId: params.postId,
                           id: todo.id,
                         });
                     }}
@@ -192,7 +216,7 @@ export default function TodoListOffline() {
                   text: newTask,
                   done: false,
                 };
-                mutateAddTodo(newTodo);
+                mutateAddTodo({ aggregateId: params.postId, ...newTodo });
                 //dispatch(createEvent("TodoAdded", newTodo));
                 setNewTask("");
               }}

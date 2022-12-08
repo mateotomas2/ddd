@@ -1,3 +1,6 @@
 export class AddTodoCommand {
-  constructor(public readonly text: string) {}
+  constructor(
+    public readonly aggregateId: string,
+    public readonly text: string
+  ) {}
 }

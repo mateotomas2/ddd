@@ -12,7 +12,7 @@ export class AddTodoHandler implements ICommandHandler<AddTodoCommand> {
 
   async execute(command: AddTodoCommand) {
     const todoList = this.publisher.mergeObjectContext(
-      await this.repository.get()
+      await this.repository.get(command.aggregateId)
     );
     todoList.addTodo(command.text);
     todoList.commit();

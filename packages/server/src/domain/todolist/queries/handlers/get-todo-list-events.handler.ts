@@ -12,7 +12,7 @@ export class GetTodoListEventsHandler
     @Inject(TodoRepository) private readonly repository: TodoRepository
   ) {}
 
-  async execute(_query: GetTodoListEventsQuery) {
-    return this.repository.getEvents();
+  async execute(query: GetTodoListEventsQuery) {
+    return this.repository.getEvents(query.aggregateId);
   }
 }

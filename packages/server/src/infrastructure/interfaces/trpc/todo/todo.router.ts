@@ -21,80 +21,110 @@ export class TRPCTodo {
     private readonly todoListFeatures: TodoListController,
     @Inject(EventBus) private readonly eventBus: EventBus
   ) {}
-  subscribeToEvent = <T extends IEvent>(
-    eventBus: EventBus,
-    type: new (T) => T
-  ) => {
-    return eventBus.pipe(
-      filter((event) => (event as IEvent).constructor.name == type.name),
-      map((event) => event as T)
-    );
-  };
-
   todoRouter = this.trpcInit.t.router({
-    onEventReceived: this.trpcInit.t.procedure.subscription(() => {
-      return observable<EventTypeMapped>((emit) => {
-        const onEventReceived = (data: EventTypeMapped) => {
-          emit.next(data);
-        };
+    onEventReceived: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          aggregateId: z.string().uuid(),
+        })
+      )
+      .subscription(({ input }) => {
+        return observable<EventTypeMapped>((emit) => {
+          const onEventReceived = (data: EventTypeMapped) => {
+            if (data.aggregateId == input.aggregateId) {
+              emit.next(data);
+            }
+          };
 
-        const subscription = this.eventBus.subscribe(onEventReceived);
+          const subscription = this.eventBus.subscribe(onEventReceived);
 
-        return () => {
-          subscription.unsubscribe();
-        };
-      });
-    }),
+          return () => {
+            subscription.unsubscribe();
+          };
+        });
+      }),
+
+    new: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          id: z.string().uuid(),
+          name: z.string(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const post = { ...input };
+        this.todoListFeatures.new(input.id, input.name);
+        return post;
+      }),
 
     add: this.trpcInit.t.procedure
       .input(
         z.object({
+          aggregateId: z.string().uuid(),
           text: z.string().min(1),
         })
       )
       .mutation(async ({ input }) => {
         const post = { ...input };
-        this.todoListFeatures.addTodo(input.text);
+        this.todoListFeatures.addTodo(input.aggregateId, input.text);
         return post;
       }),
 
     markDone: this.trpcInit.t.procedure
       .input(
         z.object({
+          aggregateId: z.string().uuid(),
           id: z.string().uuid(),
         })
       )
       .mutation(async ({ input }) => {
         const post = { ...input };
-        this.todoListFeatures.markDone(input.id);
+        this.todoListFeatures.markDone(input.aggregateId, input.id);
         return post;
       }),
 
     markUndone: this.trpcInit.t.procedure
       .input(
         z.object({
+          aggregateId: z.string().uuid(),
           id: z.string().uuid(),
         })
       )
       .mutation(async ({ input }) => {
         const post = { ...input };
-        this.todoListFeatures.markUndone(input.id);
+        this.todoListFeatures.markUndone(input.aggregateId, input.id);
         return post;
       }),
 
-    onTodoListSnapshot: this.trpcInit.t.procedure.subscription(() => {
-      return observable<Todo[]>((emit) => {
-        /*this.todoListFeatures.getTodoList().then((todoList) => {
+    onTodoListSnapshot: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          aggregateId: z.string().uuid(),
+        })
+      )
+      .subscription(() => {
+        return observable<Todo[]>((emit) => {
+          /*this.todoListFeatures.getTodoList().then((todoList) => {
           emit.next(todoList);
         });*/
-      });
-    }),
-    onTodoListEvents: this.trpcInit.t.procedure.subscription(() => {
-      return observable<EventTypeMapped[]>((emit) => {
-        this.todoListFeatures.getTodoListEvents().then((eventList) => {
-          emit.next(eventList);
         });
-      });
-    }),
+      }),
+    onTodoListEvents: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          aggregateId: z.string().uuid(),
+        })
+      )
+      .subscription(({ input }) => {
+        return observable<EventTypeMapped[]>((emit) => {
+          emit.next([]);
+
+          this.todoListFeatures
+            .getTodoListEvents(input.aggregateId)
+            .then((eventList) => {
+              emit.next(eventList);
+            });
+        });
+      }),
   });
 }

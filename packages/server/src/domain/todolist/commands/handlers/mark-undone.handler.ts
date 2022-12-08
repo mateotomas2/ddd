@@ -12,7 +12,7 @@ export class MarkUndoneHandler implements ICommandHandler<MarkUndoneCommand> {
 
   async execute(command: MarkUndoneCommand) {
     const todoList = this.publisher.mergeObjectContext(
-      await this.repository.get()
+      await this.repository.get(command.aggregateId)
     );
     todoList.markUndone(command.id);
     todoList.commit();

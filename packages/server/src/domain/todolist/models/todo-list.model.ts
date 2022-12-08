@@ -3,13 +3,13 @@ import { AggregateRoot } from "@nestjs/cqrs";
 import { v4 } from "uuid";
 
 export class TodoList extends AggregateRoot {
-  constructor() {
+  constructor(public readonly id: string) {
     super();
   }
 
   addTodo(text: string) {
     this.apply(
-      createEvent("TodoAdded", {
+      createEvent(this.id, "TodoAdded", {
         id: v4(),
         text,
         done: false,
@@ -19,7 +19,7 @@ export class TodoList extends AggregateRoot {
 
   removeTodo(id: string) {
     this.apply(
-      createEvent("Removed", {
+      createEvent(this.id, "Removed", {
         id: id,
       })
     );
@@ -27,7 +27,7 @@ export class TodoList extends AggregateRoot {
 
   markDone(id: string) {
     this.apply(
-      createEvent("MarkedDone", {
+      createEvent(this.id, "MarkedDone", {
         id: id,
       })
     );
@@ -35,7 +35,7 @@ export class TodoList extends AggregateRoot {
 
   markUndone(id: string) {
     this.apply(
-      createEvent("MarkedUndone", {
+      createEvent(this.id, "MarkedUndone", {
         id: id,
       })
     );

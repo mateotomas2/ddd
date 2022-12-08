@@ -12,7 +12,7 @@ export class RemoveTodoHandler implements ICommandHandler<RemoveTodoCommand> {
 
   async execute(command: RemoveTodoCommand) {
     const todoList = this.publisher.mergeObjectContext(
-      await this.repository.get()
+      await this.repository.get(command.aggregateId)
     );
     todoList.removeTodo(command.id);
     todoList.commit();

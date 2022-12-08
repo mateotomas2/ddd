@@ -26,6 +26,7 @@ export class TRPCService {
   });
 
   start = () => {
+    // TODO: Check if this is needed
     const handler = applyWSSHandler({
       wss: this.wss,
       router: this.appRouter,

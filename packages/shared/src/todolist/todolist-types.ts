@@ -5,5 +5,7 @@ export type Todo = {
 };
 
 export type TodoListType = {
+  id: string;
+  name: string;
   todos: Todo[];
 };
