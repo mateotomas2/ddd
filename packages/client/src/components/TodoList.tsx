@@ -24,6 +24,7 @@ import { todoListRouter } from "../Layout";
 import { useMatch } from "@tanstack/react-router";
 
 export default function TodoListOffline() {
+  // TODO: Clean up the code and move outside to make a dumb component
   const [initialState, setInitialState] = useState<TodoListType>({
     id: "",
     name: "",
@@ -41,18 +42,16 @@ export default function TodoListOffline() {
   // TODO: get from props
   const { params } = useMatch(todoListRouter.id);
 
-  /*useEffect(() => {
-    mutateSubscribe({ aggregateId: params.id });
-  }, []);*/
-
   trpc.todo.onEventReceived.useSubscription(
     { aggregateId: params.postId },
     {
       onData(event) {
-        // TODO: not already added event
+        // TODO: Implement versions and avoid conflicts
+        // TODO: Implement syncronization
         dispatch(event);
       },
       onError(err) {
+        // TODO: Handle errors better
         // eslint-disable-next-line no-console
         console.error("Subscription error:", err);
       },
@@ -165,6 +164,7 @@ export default function TodoListOffline() {
                     overlay
                     checked={todo.done}
                     onChange={(ev) => {
+                      // TODO: Implement offline
                       /*if (ev.target.checked)
                         dispatch(
                           createEvent("MarkedDone", {

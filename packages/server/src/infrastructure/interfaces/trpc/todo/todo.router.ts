@@ -1,8 +1,7 @@
 import { EventTypeMapped } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
-import { EventBus, IEvent } from "@nestjs/cqrs";
+import { EventBus } from "@nestjs/cqrs";
 import { observable } from "@trpc/server/observable";
-import { filter, map } from "rxjs";
 import { z } from "zod";
 import { TodoListController } from "../../../../domain/todolist/todolist.controller";
 import { TRCPInitService } from "../trpc.init.service";
@@ -12,7 +11,7 @@ export type Todo = {
   text: string;
   done: boolean;
 };
-
+// TODO: Move app router to shared so we can build safely the client
 @Injectable()
 export class TRPCTodo {
   constructor(
@@ -104,6 +103,7 @@ export class TRPCTodo {
       )
       .subscription(() => {
         return observable<Todo[]>((emit) => {
+          // TODO: Implement snapshots
           /*this.todoListFeatures.getTodoList().then((todoList) => {
           emit.next(todoList);
         });*/
