@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
 // utils/trpc.ts
-import { Todo } from "@monorepo/shared";
 import { createTRPCReact } from "@trpc/react-query";
-import {
-  BuildProcedure,
-  CombinedDataTransformer,
-  CreateRouterInner,
-  inferRouterInputs,
-  inferRouterOutputs,
-  RootConfig,
-  unsetMarker,
-} from "@trpc/server";
+import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@monorepo/server/src/infrastructure/interfaces/trpc/trpcService";
 
-type AppRouterTEST = CreateRouterInner<
+// TODO: Check problems building the client
+/*type AppRouterTEST = CreateRouterInner<
   RootConfig<{
     ctx: {};
     meta: {};
@@ -212,8 +204,8 @@ type AppRouterTEST = CreateRouterInner<
       }
     >;
   }
->;
+>;*/
 
-export const trpc = createTRPCReact<AppRouterTEST>();
-export type RouterInput = inferRouterInputs<AppRouterTEST>;
-export type RouterOutput = inferRouterOutputs<AppRouterTEST>;
+export const trpc = createTRPCReact<AppRouter>();
+export type RouterInput = inferRouterInputs<AppRouter>;
+export type RouterOutput = inferRouterOutputs<AppRouter>;

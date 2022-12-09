@@ -201,17 +201,17 @@ export default function TodoListOffline() {
                         onChange={(ev) => {
                           // TODO: Implement offline
                           /*if (ev.target.checked)
-                        dispatch(
-                          createEvent("MarkedDone", {
-                            id: todo.id,
-                          })
-                        );
-                      else
-                        dispatch(
-                          createEvent("MarkedUndone", {
-                            id: todo.id,
-                          })
-                        );*/
+                            dispatch(
+                              createEvent("MarkedDone", {
+                                id: todo.id,
+                              })
+                            );
+                          else
+                            dispatch(
+                              createEvent("MarkedUndone", {
+                                id: todo.id,
+                              })
+                            );*/
 
                           if (ev.target.checked)
                             mutateMarkDone({

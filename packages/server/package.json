@@ -12,10 +12,12 @@
     "start:prod": "node dist/main.js"
   },
   "dependencies": {
+    "@grpc/proto-loader": "^0.7.4",
     "@monorepo/shared": "workspace:*",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/cqrs": "^8.0.0",
+    "@nestjs/microservices": "^9.2.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-socket.io": "^9.1.2",
     "@nestjs/websockets": "^9.1.2",

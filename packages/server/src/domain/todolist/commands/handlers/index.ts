@@ -1,4 +1,5 @@
 import { AddTodoHandler } from "./add-todo.handler";
+import { DeleteTodoHandler } from "./delete-todo.handler";
 import { MarkDoneHandler } from "./mark-done.handler";
 import { MarkUndoneHandler } from "./mark-undone.handler";
 import { NewTodoListHandler } from "./new-todo-list.handler";
@@ -10,4 +11,5 @@ export const CommandHandlers = [
   MarkUndoneHandler,
   RemoveTodoHandler,
   NewTodoListHandler,
+  DeleteTodoHandler,
 ];

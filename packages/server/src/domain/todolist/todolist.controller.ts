@@ -2,6 +2,7 @@ import { EventTypeMapped, Todo } from "@monorepo/shared";
 import { Inject } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { AddTodoCommand } from "./commands/impl/add-todo.command";
+import { DeleteTodoCommand } from "./commands/impl/delete-todo.command";
 import { MarkDoneCommand } from "./commands/impl/mark-done.command";
 import { MarkUndoneCommand } from "./commands/impl/mark-undone.command";
 import { NewTodoListCommand } from "./commands/impl/new-todo-list.command";
@@ -16,6 +17,11 @@ export class TodoListController {
   async new(id: string, name: string) {
     return this.commandBus.execute(new NewTodoListCommand(id, name));
   }
+
+  async deleteTodo(aggregateId: string, id: string) {
+    return this.commandBus.execute(new DeleteTodoCommand(aggregateId, id));
+  }
+
   async addTodo(aggregateId: string, text: string) {
     return this.commandBus.execute(new AddTodoCommand(aggregateId, text));
   }

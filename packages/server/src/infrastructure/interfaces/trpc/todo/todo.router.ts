@@ -69,6 +69,18 @@ export class TRPCTodo {
         this.todoListFeatures.addTodo(input.aggregateId, input.text);
         return post;
       }),
+    deleteTodo: this.trpcInit.t.procedure
+      .input(
+        z.object({
+          aggregateId: z.string().uuid(),
+          id: z.string().uuid(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const post = { ...input };
+        this.todoListFeatures.deleteTodo(input.aggregateId, input.id);
+        return post;
+      }),
 
     markDone: this.trpcInit.t.procedure
       .input(
