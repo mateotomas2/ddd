@@ -6,6 +6,8 @@ import {
   extendTheme as extendJoyTheme,
   CssVarsProvider,
   CssBaseline,
+  GlobalStyles,
+  useColorScheme,
 } from "@mui/joy";
 
 import { deepmerge } from "@mui/utils";
@@ -107,6 +109,7 @@ function App() {
       ],
     })
   );
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>

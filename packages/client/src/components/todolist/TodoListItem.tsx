@@ -22,8 +22,8 @@ import {
   todoListReducer,
   EventTypeMapped,
 } from "@monorepo/shared";
-import { trpc } from "../utils/trpc";
-import { todoListRouter } from "../Layout";
+import { trpc } from "../../utils/trpc";
+import { todoListRouter } from "../../Layout";
 import { useMatch } from "@tanstack/react-router";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";

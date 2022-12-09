@@ -1,5 +1,5 @@
 import { useMatch } from "@tanstack/react-router";
-import TodoListOffline from "../components/TodoList";
+import TodoListOffline from "../components/todolist/TodoList";
 import { todoListRouter } from "../Layout";
 
 export function TodoListPage() {
@@ -8,7 +8,6 @@ export function TodoListPage() {
   return (
     <div className="p-2 flex gap-2">
       <TodoListOffline />
-      {JSON.stringify(params.postId)}
     </div>
   );
 }
