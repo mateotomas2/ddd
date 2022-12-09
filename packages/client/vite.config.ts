@@ -8,11 +8,12 @@ export default defineConfig({
     port: 3000,
   },
   optimizeDeps: {
-    include: ["@monorepo/shared"],
+    include: ["@monorepo/shared", "@monorepo/server"],
   },
   build: {
     commonjsOptions: {
-      esmExternals: false,
+      esmExternals: true,
+      include: [/dist/, /node_modules/],
     },
   },
 });

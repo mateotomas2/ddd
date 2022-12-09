@@ -1,6 +1,6 @@
 import { EventTypeMapped } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
-import { EventBus } from "@nestjs/cqrs";
+import { EventBus, IEvent } from "@nestjs/cqrs";
 import { observable } from "@trpc/server/observable";
 import { z } from "zod";
 import { TodoListController } from "../../../../domain/todolist/todolist.controller";
@@ -29,9 +29,10 @@ export class TRPCTodo {
       )
       .subscription(({ input }) => {
         return observable<EventTypeMapped>((emit) => {
-          const onEventReceived = (data: EventTypeMapped) => {
-            if (data.aggregateId == input.aggregateId) {
-              emit.next(data);
+          const onEventReceived = (data: IEvent) => {
+            const data2 = data as EventTypeMapped;
+            if (data2.aggregateId == input.aggregateId) {
+              emit.next(data2);
             }
           };
 

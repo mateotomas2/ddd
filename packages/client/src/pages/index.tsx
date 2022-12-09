@@ -35,7 +35,7 @@ export function Index() {
               id: uuid,
               name: newTodo,
             });
-            window.location = uuid;
+            window.location.href = uuid;
             setNewTodo("");
           }}
         >

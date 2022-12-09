@@ -33,7 +33,7 @@ export class TRPCService {
       createContext,
     });
 
-    this.wss.on("connection", (ws) => {
+    this.wss.on("connection", (ws: WebSocketServer) => {
       console.log(`➕➕ Connection (${this.wss.clients.size})`);
       ws.once("close", () => {
         console.log(`➖➖ Connection (${this.wss.clients.size})`);

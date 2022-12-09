@@ -1,7 +1,7 @@
 {
   //"extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ESNext",
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -18,9 +18,11 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
+    "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "dist",
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
     "experimentalDecorators": true
   },
   "include": [
