@@ -12,7 +12,7 @@ export default defineConfig({
   },
   build: {
     commonjsOptions: {
-      esmExternals: true,
+      esmExternals: false,
     },
   },
 });
