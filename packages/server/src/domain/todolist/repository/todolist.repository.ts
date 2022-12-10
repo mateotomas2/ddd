@@ -1,6 +1,6 @@
 import {
   EventTypeMapped,
-  Todo,
+  initialTodoListState,
   todoListReducer,
   TodoListType,
 } from "@monorepo/shared";
@@ -58,8 +58,18 @@ export class TodoRepository {
     return new TodoList(aggregateId);
   }
 
-  async findAll(aggregateId: string): Promise<Todo[]> {
-    return this.state[aggregateId].todos;
+  async findAll(aggregateId: string): Promise<TodoListType> {
+    const events = await EventDB.find({ aggregateId: { $eq: aggregateId } });
+    return events.reduce(
+      (result, current) =>
+        todoListReducer(result, {
+          aggregateId: current.aggregateId,
+          type: current.type,
+          timestamp: current.timestamp,
+          payload: current.payload,
+        } as EventTypeMapped),
+      { ...initialTodoListState }
+    );
   }
 
   async getEvents(aggregateId: string): Promise<EventTypeMapped[]> {

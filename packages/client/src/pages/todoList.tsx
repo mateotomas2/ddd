@@ -1,5 +1,5 @@
 import { useMatch } from "@tanstack/react-router";
-import TodoListOffline from "../components/todolist/TodoList";
+import TodoList from "../components/todolist/TodoList";
 import { todoListRouter } from "../Layout";
 
 export function TodoListPage() {
@@ -7,7 +7,7 @@ export function TodoListPage() {
 
   return (
     <div className="p-2 flex gap-2">
-      <TodoListOffline />
+      <TodoList aggregateId={params.aggregateId} />
     </div>
   );
 }

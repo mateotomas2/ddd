@@ -1,11 +1,20 @@
-import { Button, Grid, TextField } from "@mui/joy";
-import { useState } from "react";
+import { Grid, TextField } from "@mui/joy";
+import { useEffect, useState } from "react";
 import { v4 } from "uuid";
+import { history } from "../Layout";
 import { trpc } from "../utils/trpc";
 
 export function Index() {
   const [newTodo, setNewTodo] = useState("");
-  const { mutate: mutateNewTodoList } = trpc.todo.new.useMutation();
+  const {
+    mutate: mutateNewTodoList,
+    isSuccess,
+    data,
+  } = trpc.todo.new.useMutation();
+
+  useEffect(() => {
+    if (data) history.push(data.id);
+  }, [isSuccess]);
 
   return (
     <Grid
@@ -17,30 +26,24 @@ export function Index() {
       justifyContent="center"
       style={{ minHeight: "100vh" }}
     >
-      <Grid xs={9}>
+      <Grid>
         <TextField
           onChange={(ev) => setNewTodo(ev.currentTarget.value)}
           value={newTodo}
           placeholder="New todo list"
-        />
-      </Grid>
-      <Grid xs={3}>
-        <Button
-          variant="solid"
-          disabled={newTodo === ""}
-          sx={{ width: "100%" }}
-          onClick={() => {
-            const uuid = v4();
-            mutateNewTodoList({
-              id: uuid,
-              name: newTodo,
-            });
-            window.location.href = uuid;
-            setNewTodo("");
+          autoFocus
+          onKeyDown={(ev) => {
+            if (ev.key == "Enter") {
+              ev.preventDefault();
+
+              const uuid = v4();
+              mutateNewTodoList({
+                id: uuid,
+                name: newTodo,
+              });
+            }
           }}
-        >
-          Add
-        </Button>
+        />
       </Grid>
     </Grid>
   );

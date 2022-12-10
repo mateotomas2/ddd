@@ -1,6 +1,12 @@
 import { EventTypeMapped } from "./events";
 import { TodoListType } from "./todolist-types";
 
+export const initialTodoListState = {
+  id: "",
+  name: "",
+  todos: [],
+} as TodoListType;
+
 export const todoListReducer = (
   state: TodoListType,
   event: EventTypeMapped

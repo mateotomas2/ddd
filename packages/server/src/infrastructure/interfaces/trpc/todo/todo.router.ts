@@ -1,4 +1,4 @@
-import { EventTypeMapped } from "@monorepo/shared";
+import { EventTypeMapped, TodoListType } from "@monorepo/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventBus, IEvent } from "@nestjs/cqrs";
 import { observable } from "@trpc/server/observable";
@@ -114,15 +114,17 @@ export class TRPCTodo {
           aggregateId: z.string().uuid(),
         })
       )
-      .subscription(() => {
-        return observable<Todo[]>((emit) => {
+      .subscription(({ input }) => {
+        return observable<TodoListType>((emit) => {
           // TODO: Implement snapshots
-          /*this.todoListFeatures.getTodoList().then((todoList) => {
-          emit.next(todoList);
-        });*/
+          this.todoListFeatures
+            .getTodoList(input.aggregateId)
+            .then((todoList) => {
+              emit.next(todoList);
+            });
         });
       }),
-    onTodoListEvents: this.trpcInit.t.procedure
+    onInitialEvents: this.trpcInit.t.procedure
       .input(
         z.object({
           aggregateId: z.string().uuid(),
@@ -130,8 +132,6 @@ export class TRPCTodo {
       )
       .subscription(({ input }) => {
         return observable<EventTypeMapped[]>((emit) => {
-          emit.next([]);
-
           this.todoListFeatures
             .getTodoListEvents(input.aggregateId)
             .then((eventList) => {

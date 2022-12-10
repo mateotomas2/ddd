@@ -1,7 +1,7 @@
 import "./App.css";
 import { useColorScheme } from "@mui/joy";
 import { ModeToggle } from "./components/DarkMode";
-import TodoListOffline from "./components/todolist/TodoList";
+import TodoList from "./components/todolist/TodoList";
 
 import styled from "@emotion/styled";
 import { withTheme } from "@emotion/react";
@@ -12,6 +12,7 @@ import {
   RouterProvider,
   createReactRouter,
   createRouteConfig,
+  createBrowserHistory,
 } from "@tanstack/react-router";
 import { Index } from "./pages";
 import { About } from "./pages/about";
@@ -34,7 +35,7 @@ const indexRoute = rootRoute.createRoute({
 });
 
 export const todoListRouter = rootRoute.createRoute({
-  path: "$postId",
+  path: "$aggregateId",
   component: TodoListPage,
   errorComponent: () => "ERROR",
 });
@@ -49,8 +50,9 @@ const routeConfig = rootRoute.addChildren([
   aboutRoute,
   todoListRouter,
 ]);
+export const history = createBrowserHistory();
 
-const router = createReactRouter({ routeConfig });
+const router = createReactRouter({ routeConfig, history });
 
 export const Layout = () => {
   const { mode } = useColorScheme();
