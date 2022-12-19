@@ -13,6 +13,7 @@ interface TodoListState {
   reset: () => void;
   setState: (state: TodoListType) => void;
   addEvent: (event: EventTypeMapped) => void;
+  replayFromVersion: (index: number) => void;
 }
 export const useTodoListStore = create<TodoListState>((set) => ({
   eventList: [],
@@ -42,6 +43,17 @@ export const useTodoListStore = create<TodoListState>((set) => ({
       produce((draft) => {
         draft.eventList.push(event);
         draft.state = todoListReducer(draft.state, event);
+      })
+    );
+  },
+  replayFromVersion: (index: number) => {
+    set(
+      produce((draft) => {
+        draft.state = draft.eventList
+          .slice(0, index + 1)
+          .reduce((state: TodoListType, event: EventTypeMapped) => {
+            return todoListReducer({ ...state }, event);
+          }, initialTodoListState);
       })
     );
   },

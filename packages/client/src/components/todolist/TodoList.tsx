@@ -15,13 +15,14 @@ import TodoListTask from "./TodoListTask";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import RenderIfVisible from "react-render-if-visible";
+import TodoListHistory from "./TodoListHistory";
 
 export default function TodoList(props: { aggregateId: string }) {
   const { aggregateId } = props;
   const [isLoading, setIsLoading] = useState(true);
 
   const state = useTodoListStore((state) => state.state);
-  //const events = useTodoListStore((state) => state.eventList);
+  const events = useTodoListStore((state) => state.eventList);
   const addEvent = useTodoListStore((state) => state.addEvent);
   const reset = useTodoListStore((state) => state.reset);
   const setState = useTodoListStore((state) => state.setState);
@@ -41,17 +42,18 @@ export default function TodoList(props: { aggregateId: string }) {
     }
   );
 
-  /*trpc.todo.onInitialEvents.useSubscription(
+  trpc.todo.onInitialEvents.useSubscription(
     { aggregateId },
     {
       onData(input) {
+        //console.log(input);
         setIsLoading(false);
         input.forEach((event) => addEvent(event));
       },
     }
-  );*/
+  );
 
-  trpc.todo.onTodoListSnapshot.useSubscription(
+  /*trpc.todo.onTodoListSnapshot.useSubscription(
     { aggregateId },
     {
       onData(input) {
@@ -60,7 +62,7 @@ export default function TodoList(props: { aggregateId: string }) {
         setState(input);
       },
     }
-  );
+  );*/
 
   return (
     <Grid
@@ -70,6 +72,7 @@ export default function TodoList(props: { aggregateId: string }) {
       alignItems="center"
       style={{ minHeight: "100vh", padding: "20px" }}
     >
+      <TodoListHistory aggregateId={aggregateId} />
       <AnimatePresence>
         {isLoading && (
           <motion.div
